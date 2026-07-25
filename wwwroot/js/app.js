@@ -11,6 +11,7 @@ function bindNavigation() {
             const pageName = link.dataset.view;
             setActiveNavLink(link);
             loadPage(pageName);
+            closeSidebarDrawer(); // tapping a nav link on mobile should close the drawer
         });
     });
 }
@@ -40,6 +41,31 @@ function bindTopbarControls() {
 
     const notificationsBtn = document.getElementById('notificationsBtn');
     if (notificationsBtn) notificationsBtn.addEventListener('click', toggleNotifications);
+}
+
+/**
+ * Wires up the mobile hamburger button, the drawer's own close button,
+ * and the dark overlay — all three ways a user can open/close the
+ * sidebar drawer on small screens.
+ */
+function bindSidebarDrawer() {
+    const openBtn = document.getElementById('sidebar-open-btn');
+    const closeBtn = document.getElementById('sidebar-close-btn');
+    const overlay = document.getElementById('sidebar-overlay');
+
+    if (openBtn) openBtn.addEventListener('click', openSidebarDrawer);
+    if (closeBtn) closeBtn.addEventListener('click', closeSidebarDrawer);
+    if (overlay) overlay.addEventListener('click', closeSidebarDrawer);
+}
+
+function openSidebarDrawer() {
+    document.getElementById('app-sidebar')?.classList.add('sidebar-open');
+    document.getElementById('sidebar-overlay')?.classList.remove('hidden');
+}
+
+function closeSidebarDrawer() {
+    document.getElementById('app-sidebar')?.classList.remove('sidebar-open');
+    document.getElementById('sidebar-overlay')?.classList.add('hidden');
 }
 
 function renderCurrentUser() {
@@ -94,6 +120,7 @@ window.onload = () => {
     bindUserMenu();
     bindNavigation();
     bindTopbarControls();
+    bindSidebarDrawer();
     initAgentSwitcher();
 
     loadPage(DEFAULT_PAGE);

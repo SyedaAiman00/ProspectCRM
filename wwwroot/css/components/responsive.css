@@ -1,0 +1,88 @@
+/* ==========================================================================
+   RESPONSIVE SHELL — turns the always-visible sidebar into a slide-in
+   drawer on small screens. Sidebar/header markup stays identical on all
+   screen sizes; only these rules change based on viewport width.
+   ========================================================================== */
+
+/* Buttons only relevant on mobile — hidden by default on desktop */
+.sidebar-close-btn {
+    display: none;
+    color: #ffffff;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 0.4rem;
+}
+
+.sidebar-open-btn {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    color: #4b5563;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.4rem;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+}
+.sidebar-open-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.5);
+    z-index: 90;
+}
+.sidebar-overlay.hidden {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    /* Sidebar becomes a fixed off-canvas panel, hidden by translating it
+       off-screen instead of removing it — keeps all its JS bindings alive. */
+    #app-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        z-index: 100;
+        transform: translateX(-100%);
+        transition: transform 0.22s ease-out;
+        width: 80%;
+        max-width: 18rem;
+    }
+
+    #app-sidebar.sidebar-open {
+        transform: translateX(0);
+    }
+
+    .sidebar-close-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .sidebar-open-btn {
+        display: inline-flex;
+    }
+
+    /* Header title shouldn't fight the hamburger button for space */
+    .navbar-h1 {
+        max-width: 55vw;
+    }
+}
+
+/* Above the breakpoint, make sure mobile-only elements never show even if
+   JS toggled a class before the viewport was resized larger. */
+@media (min-width: 769px) {
+    #app-sidebar {
+        transform: none !important;
+    }
+    .sidebar-overlay {
+        display: none !important;
+    }
+}

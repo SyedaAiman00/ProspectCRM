@@ -8,6 +8,7 @@
 @import 'components/navbar.css';
 @import 'components/buttons.css';
 @import 'components/modal.css';
+@import 'components/responsive.css';
 
 /* 3. Pages */
 @import 'pages/dashboard.css';
