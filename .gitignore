@@ -18,3 +18,7 @@ obj/
 
 # Local development settings
 appsettings.Development.json
+
+
+# Local development settings
+Properties/launchSettings.json

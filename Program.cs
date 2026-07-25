@@ -115,9 +115,13 @@ using (var scope = app.Services.CreateScope())
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+    // Apply all EF Core migrations
+    await db.Database.MigrateAsync();
+
+    // Seed initial data
     await ProspectCRM.Data.DropdownSeeder.SeedAsync(db);
 }
-
 // Authorize .NET to open and read files out of the wwwroot folder.
 app.UseStaticFiles();
 
