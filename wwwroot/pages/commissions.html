@@ -1,0 +1,63 @@
+<!-- EXECUTIVE KPI OVERVIEW -->
+<div class="px-6 pt-6 grid grid-cols-1 md:grid-cols-3 gap-5 flex-shrink-0">
+    <!-- Card 1: Total Commission Earned (agency-wide) -->
+    <div class="bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between transition-colors duration-200" id="kpi-card-total-commission">
+        <div class="space-y-1">
+            <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Total Commission Earned</p>
+            <h3 class="text-xl font-bold text-gray-900 tracking-tight" id="kpi-total-commission-value">AED 0</h3>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center text-teal-600">
+            <i data-lucide="landmark" class="w-5 h-5"></i>
+        </div>
+    </div>
+
+    <!-- Card 2: Your Agent Commission (take-home share) -->
+    <div class="bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between transition-colors duration-200" id="kpi-card-agent-commission">
+        <div class="space-y-1">
+            <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Your Agent Commission</p>
+            <h3 class="text-xl font-bold text-gray-900 tracking-tight" id="kpi-agent-commission-value">AED 0</h3>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600">
+            <i data-lucide="wallet" class="w-5 h-5"></i>
+        </div>
+    </div>
+
+    <!-- Card 3: Average Comm Rate -->
+    <div class="bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between transition-colors duration-200" id="kpi-card-avg-rate">
+        <div class="space-y-1">
+            <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Average Comm Rate</p>
+            <h3 class="text-xl font-bold text-gray-900 tracking-tight" id="kpi-avg-rate-value">0%</h3>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+            <i data-lucide="percent" class="w-5 h-5"></i>
+        </div>
+    </div>
+</div>
+
+<!-- LEDGER TABLE HEADER -->
+<div class="px-6 pt-6 flex items-center justify-between flex-shrink-0">
+    <h2 class="text-sm font-bold text-gray-700">Commission Ledger</h2>
+    <span class="text-[11px] text-gray-400 font-medium">Read-only — reflects Clients Pipeline data</span>
+</div>
+
+<!-- LEDGER TABLE -->
+<div class="flex-1 p-6 overflow-y-auto">
+    <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm overflow-hidden">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-gray-50 border-b border-gray-100 text-left text-[11px] text-gray-400 font-bold uppercase tracking-wider">
+                    <th class="px-4 py-3">Insured Name</th>
+                    <th class="px-4 py-3">Insurance Company</th>
+                    <th class="px-4 py-3">Policy No</th>
+                    <th class="px-4 py-3 text-right">Annual Premium</th>
+                    <th class="px-4 py-3 text-right">Comm Rate</th>
+                    <th class="px-4 py-3 text-right">Total Commission</th>
+                    <th class="px-4 py-3 text-right">Agent Commission</th>
+                </tr>
+            </thead>
+            <tbody id="ledger-table-body">
+                <!-- Rows injected by commissions.js -->
+            </tbody>
+        </table>
+    </div>
+</div>

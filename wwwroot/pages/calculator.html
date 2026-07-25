@@ -1,0 +1,63 @@
+<div class="flex-1 p-6 overflow-y-auto">
+    <div class="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+
+        <!-- Input Card -->
+        <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-5 space-y-4 h-fit">
+            <h3 class="text-sm font-bold text-gray-700 mb-1">Policy Inputs</h3>
+
+            <div>
+                <label class="form-label" for="pc-annual-premium">Annual Premium (AED)</label>
+                <input class="form-input calc-input" type="number" step="0.01" min="0" id="pc-annual-premium" value="0" />
+            </div>
+
+            <div>
+                <label class="form-label" for="pc-policy-fee">Policy Fee (AED)</label>
+                <input class="form-input calc-input" type="number" step="0.01" min="0" id="pc-policy-fee" value="0" />
+            </div>
+
+            <div>
+                <label class="form-label" for="pc-basmah">BASMAH (AED)</label>
+                <input class="form-input calc-input" type="number" step="0.01" min="0" id="pc-basmah" value="19" />
+                <p class="text-[11px] text-gray-400 mt-1">Defaults to AED 19 (health policies). Set to 0 if not applicable.</p>
+            </div>
+
+            <div>
+                <label class="form-label" for="pc-comm-rate">Comm Rate (%)</label>
+                <input class="form-input calc-input" type="number" step="0.01" min="0" max="100" id="pc-comm-rate" value="0" />
+                <p class="text-[11px] text-gray-400 mt-1">% of Annual Premium the insurer pays the agency.</p>
+            </div>
+
+            <div>
+                <label class="form-label" for="pc-agent-split">Agent Split (%)</label>
+                <input class="form-input calc-input" type="number" step="0.01" min="0" max="100" id="pc-agent-split" value="0" />
+                <p class="text-[11px] text-gray-400 mt-1">% of Total Commission the agent keeps.</p>
+            </div>
+        </div>
+
+        <!-- Results Card -->
+        <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-5 space-y-3 h-fit">
+            <h3 class="text-sm font-bold text-gray-700 mb-1">Calculated Results</h3>
+
+            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                <span class="text-xs text-gray-500 font-medium">VAT (5%)</span>
+                <span class="text-sm font-bold text-gray-800" id="pc-result-vat">AED 0.00</span>
+            </div>
+
+            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                <span class="text-xs text-gray-500 font-medium">Total Premium</span>
+                <span class="text-lg font-bold text-teal-700" id="pc-result-total-premium">AED 0.00</span>
+            </div>
+
+            <div class="flex items-center justify-between py-2 border-b border-gray-100">
+                <span class="text-xs text-gray-500 font-medium">Total Commission</span>
+                <span class="text-sm font-bold text-gray-800" id="pc-result-total-commission">AED 0.00</span>
+            </div>
+
+            <div class="flex items-center justify-between py-2">
+                <span class="text-xs text-gray-500 font-medium">Agent Commission</span>
+                <span class="text-lg font-bold text-emerald-600" id="pc-result-agent-commission">AED 0.00</span>
+            </div>
+        </div>
+
+    </div>
+</div>

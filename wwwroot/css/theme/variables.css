@@ -1,0 +1,28 @@
+:root {
+    /* Brand Colors */
+    --color-primary: #0d9488;
+    --color-primary-hover: #0f766e; /* Matches the app's existing teal-600 -> teal-700 hover pattern */
+    --color-primary-light: #EAF5F2; /* Used for active states */
+    --color-primary-tint: rgba(13, 148, 136, 0.1); /* Soft tinted backgrounds, e.g. feature icon chips */
+
+    /* Backgrounds & Text */
+    --color-bg-app: #e8f1ee;
+    --color-bg-page: #f8fafc; /* Lighter neutral background, used outside the app shell (auth pages) */
+    --color-text-main: #024f4e;
+    --color-sidebar: #024f4e;
+
+    /* Neutral Text & Borders — for pages that don't use Tailwind utility classes (e.g. auth) */
+    --color-text-dark: #1a202c;
+    --color-text-body: #2d3748;
+    --color-text-muted: #718096;
+    --color-border: #e2e8f0;
+
+    /* Dark Mode Defaults */
+    --color-dark-bg: #0f172a;
+    --color-dark-surface: #1e293b;
+
+    /* UI Accents */
+    --scrollbar-track: transparent;
+    --scrollbar-thumb: rgba(13, 148, 136, 0.2);
+    --scrollbar-thumb-hover: rgba(13, 148, 136, 0.4);
+}

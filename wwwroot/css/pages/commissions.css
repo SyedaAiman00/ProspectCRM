@@ -1,0 +1,43 @@
+/* ==========================================================================
+   COMMISSION LEDGER — DARK MODE
+   Same KPI-card treatment as Dashboard/Prospects/Clients, plus dark-mode
+   styling for the ledger table itself.
+   ========================================================================== */
+
+body.canvas-dark-theme #kpi-card-total-commission,
+body.canvas-dark-theme #kpi-card-agent-commission,
+body.canvas-dark-theme #kpi-card-avg-rate {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.canvas-dark-theme #kpi-card-total-commission h3,
+body.canvas-dark-theme #kpi-card-agent-commission h3,
+body.canvas-dark-theme #kpi-card-avg-rate h3 {
+    color: #ffffff !important;
+}
+
+body.canvas-dark-theme #ledger-table-body,
+body.canvas-dark-theme #ledger-table-body ~ *,
+body.canvas-dark-theme table {
+    color: #cbd5e1;
+}
+
+body.canvas-dark-theme table thead tr {
+    background-color: #0f172a !important;
+    border-color: #334155 !important;
+}
+
+body.canvas-dark-theme table tbody tr {
+    border-color: #334155 !important;
+}
+
+body.canvas-dark-theme table tbody tr:hover {
+    background-color: #1e293b !important;
+}
+
+body.canvas-dark-theme table + div,
+body.canvas-dark-theme .bg-white:has(table) {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}

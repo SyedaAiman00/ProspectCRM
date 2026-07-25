@@ -1,0 +1,17 @@
+/* ==========================================================================
+   CLIENTS PIPELINE — KPI DARK MODE
+   Same treatment as the Prospects/Dashboard KPI cards for visual consistency.
+   ========================================================================== */
+
+body.canvas-dark-theme #kpi-card-collected,
+body.canvas-dark-theme #kpi-card-active-clients,
+body.canvas-dark-theme #kpi-card-balance {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.canvas-dark-theme #kpi-card-collected h3,
+body.canvas-dark-theme #kpi-card-active-clients h3,
+body.canvas-dark-theme #kpi-card-balance h3 {
+    color: #ffffff !important;
+}

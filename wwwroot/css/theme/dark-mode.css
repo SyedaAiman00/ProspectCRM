@@ -1,0 +1,53 @@
+/* ==========================================================================
+   GLOBAL DARK MODE BASE
+   Rules here apply app-wide (sidebar, header, shared cards) — not tied to
+   any single page. Page-specific dark-mode overrides live in
+   pages/dashboard.css and pages/prospects.css instead.
+   ========================================================================== */
+
+body.canvas-dark-theme {
+    background-color: var(--color-dark-bg) !important;
+    color: #f8fafc !important;
+}
+
+/* Sidebar and header shells */
+body.canvas-dark-theme aside,
+body.canvas-dark-theme header {
+    background-color: var(--color-dark-surface) !important;
+    border-color: #334155 !important;
+}
+
+/* Text overrides inside dark headers/sidebars */
+body.canvas-dark-theme h1,
+body.canvas-dark-theme span.text-gray-900,
+body.canvas-dark-theme p.text-gray-900 {
+    color: #ffffff !important;
+}
+
+/* Sidebar nav links */
+body.canvas-dark-theme .sidebar-link {
+    color: #94a3b8;
+}
+body.canvas-dark-theme .sidebar-link:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+body.canvas-dark-theme .sidebar-link.active {
+    background-color: #0d9488 !important;
+    color: #ffffff !important;
+}
+
+/* Topbar utility buttons (theme toggle, notifications) */
+body.canvas-dark-theme .topbar-utility-btn {
+    color: #94a3b8;
+}
+body.canvas-dark-theme .topbar-utility-btn:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+/* Shared light-gray cards (e.g. Access Scope panel in sidebar) */
+body.canvas-dark-theme .bg-gray-50 {
+    background-color: #334155 !important;
+    border-color: #475569 !important;
+}

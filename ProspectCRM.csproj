@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>6918b2b7-dba9-4764-a78d-551ce55d5b0d</UserSecretsId>
+  </PropertyGroup>
+
+<ItemGroup>
+  <PackageReference Include="Google.Apis.Auth" Version="1.75.0" />
+  <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.0" />
+  <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.0" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0" />
+  <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.0">
+    <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    <PrivateAssets>all</PrivateAssets>
+  </PackageReference>
+  <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="9.0.0" />
+  <PackageReference Include="Swashbuckle.AspNetCore" Version="10.2.3" />
+</ItemGroup>
+
+</Project>

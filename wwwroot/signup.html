@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProspectCRM - Sign Up</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <link rel="stylesheet" href="/css/main.css?v=1.4">
+</head>
+<body class="auth-page">
+
+    <div class="auth-container">
+        <div class="auth-left-panel">
+            <div>
+                <div class="auth-brand">
+                    <div class="auth-brand-icon">
+                        <i data-lucide="shield-check"></i>
+                    </div>
+                    <div class="auth-brand-name">Prospect<span>CRM</span></div>
+                </div>
+
+                <div class="auth-hero-text">
+                    <h1>Transform your insurance workflow</h1>
+                    <p>Track prospects, manage clients and close more policies – all in one place.</p>
+                </div>
+
+                <ul class="auth-features-list">
+                    <li class="auth-feature-item"><i data-lucide="users"></i> Track every prospect</li>
+                    <li class="auth-feature-item"><i data-lucide="calendar-days"></i> Never miss a follow-up</li>
+                    <li class="auth-feature-item"><i data-lucide="user-check"></i> Manage clients in one place</li>
+                    <li class="auth-feature-item"><i data-lucide="bar-chart-3"></i> Monitor your team's pipeline</li>
+                </ul>
+            </div>
+
+            <div class="auth-image-preview">
+                <img src="/assets/images/dashboard-preview.png" alt="ProspectCRM Dashboard Preview" class="auth-dashboard-img">
+            </div>
+        </div>
+
+        <div class="auth-right-panel">
+            <div class="auth-form-box">
+                <div class="auth-form-header">
+                    <h2>Create Account</h2>
+                    <p>Get started with your 14-day free trial</p>
+                </div>
+
+               <form id="signup-form">
+                    <div class="auth-form-row">
+                        <div class="auth-form-group">
+                            <label for="firstname">First Name</label>
+                            <div class="auth-input-wrapper">
+                                <i data-lucide="user"></i>
+                                <input type="text" id="firstname" placeholder="First name" required>
+                            </div>
+                        </div>
+
+                        <div class="auth-form-group">
+                            <label for="lastname">Last Name</label>
+                            <div class="auth-input-wrapper">
+                                <i data-lucide="user"></i>
+                                <input type="text" id="lastname" placeholder="Last name" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label for="email">Email Address</label>
+                        <div class="auth-input-wrapper">
+                            <i data-lucide="mail"></i>
+                            <input type="email" id="email" placeholder="Enter your email" required>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-group">
+                        <label for="password">Password</label>
+                        <div class="auth-input-wrapper">
+                            <i data-lucide="lock"></i>
+                            <input type="password" id="password" placeholder="Create a strong password" required>
+                            <i data-lucide="eye" class="auth-toggle-password"></i>
+                        </div>
+                    </div>
+
+                    <div class="auth-form-options">
+                        <label class="auth-remember-me">
+                            <input type="checkbox" id="terms" required>
+                            <span>I agree to the <a href="#" class="auth-inline-link">Terms &amp; Conditions</a></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-btn-submit">Get Started</button>
+                </form>
+
+                
+
+                <div id="google-signup-btn" class="auth-google-btn-container"></div>
+
+                
+
+                <div class="auth-switch-link">
+                    Already have an account? <a href="/login.html" class="auth-inline-link auth-text-bold">Sign In</a>
+                </div>
+
+                <div class="auth-footer-copyright">
+                    &copy; 2026 ProspectCRM. All rights reserved.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="/js/pages/auth.js"></script>
+</body>
+</html>

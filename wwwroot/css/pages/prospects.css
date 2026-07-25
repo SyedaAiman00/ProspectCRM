@@ -1,0 +1,145 @@
+/* ==========================================================================
+   PROSPECTS BOARD — CARD STYLING (LIGHT MODE)
+   Defines the floating white card look for each kanban card.
+   Previously undefined — cards.js referenced this class but no rule existed,
+   so cards had no background/border/shadow and blended into the column.
+   ========================================================================== */
+
+.kanban-prospect-card {
+    background-color: #ffffff;
+    border-radius: 0.85rem;
+    padding: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 1px 3px rgba(0, 0, 0, 0.06);
+    transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.kanban-prospect-card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   PROSPECTS BOARD — DARK MODE
+   Kanban column theming for the Prospects Board page.
+   Selectors target the actual column IDs instead of nth-child position,
+   so reordering or adding columns won't silently break the colors.
+   ========================================================================== */
+
+/* Card background in dark mode */
+body.canvas-dark-theme .kanban-prospect-card {
+    background-color: #1e293b !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+/* Column: New Leads (Muted Dark Pink) */
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-new) {
+    background-color: rgba(157, 23, 77, 0.2) !important;
+    border-color: rgba(157, 23, 77, 0.4) !important;
+}
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-new) h3 {
+    color: #f472b6 !important;
+}
+
+/* Column: Contacted (Muted Dark Amber) */
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-contacted) {
+    background-color: rgba(146, 64, 14, 0.2) !important;
+    border-color: rgba(146, 64, 14, 0.4) !important;
+}
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-contacted) h3 {
+    color: #fbbf24 !important;
+}
+
+/* Column: In Progress (Muted Dark Lavender) */
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-progress) {
+    background-color: rgba(63, 81, 181, 0.2) !important;
+    border-color: rgba(63, 81, 181, 0.4) !important;
+}
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-progress) h3 {
+    color: #818cf8 !important;
+}
+
+/* Column: Qualified Leads (Muted Dark Emerald) */
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-qualified) {
+    background-color: rgba(6, 78, 59, 0.25) !important;
+    border-color: rgba(6, 78, 59, 0.4) !important;
+}
+body.canvas-dark-theme #view-prospects-canvas > div:has(#col-qualified) h3 {
+    color: #34d399 !important;
+}
+
+/* Count badges (New / Contacted / Progress / Qualified) */
+body.canvas-dark-theme #view-prospects-canvas span[id^="count-"] {
+    background-color: #334155 !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   CONTACT POPOVER — shown when clicking a card's phone/email icon
+   ========================================================================== */
+
+.contact-icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    padding: 2px;
+    cursor: pointer;
+    border-radius: 0.35rem;
+    transition: background-color 0.15s ease;
+}
+
+.contact-icon-btn:hover {
+    background-color: #f3f4f6;
+}
+
+.contact-popover {
+    position: absolute;
+    z-index: 200;
+    background-color: #111827;
+    color: #ffffff;
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 0.4rem 0.65rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+    white-space: nowrap;
+    animation: popover-fade-in 0.12s ease-out;
+}
+
+@keyframes popover-fade-in {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+body.canvas-dark-theme .contact-icon-btn:hover {
+    background-color: #334155;
+}
+
+/* ==========================================================================
+   PROSPECT DELETE BUTTON — small trash icon in the card header
+   ========================================================================== */
+
+.prospect-delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.15rem;
+    height: 1.15rem;
+    border-radius: 0.3rem;
+    border: none;
+    background: transparent;
+    color: #cbd5e1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.prospect-delete-btn:hover {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+body.canvas-dark-theme .prospect-delete-btn:hover {
+    background-color: rgba(220, 38, 38, 0.15);
+}

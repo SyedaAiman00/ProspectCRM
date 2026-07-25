@@ -1,0 +1,23 @@
+/* ==========================================================================
+   EXECUTIVE DASHBOARD — DARK MODE
+   KPI card theming for the Dashboard page.
+   Kanban board dark-mode rules moved out to pages/prospects.css —
+   the board now lives on the Prospects page, not this one.
+   ========================================================================== */
+
+body.canvas-dark-theme #kpi-card-value,
+body.canvas-dark-theme #kpi-card-count,
+body.canvas-dark-theme #kpi-card-target {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.canvas-dark-theme #kpi-card-value h3,
+body.canvas-dark-theme #kpi-card-count h3,
+body.canvas-dark-theme #kpi-card-target h3 {
+    color: #ffffff !important;
+}
+
+body.canvas-dark-theme #kpi-card-target .bg-gray-100 {
+    background-color: #334155 !important;
+} 

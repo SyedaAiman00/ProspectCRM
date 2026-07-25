@@ -1,0 +1,47 @@
+<!-- EXECUTIVE KPI OVERVIEW -->
+<div class="px-6 pt-6 grid grid-cols-1 md:grid-cols-3 gap-5 flex-shrink-0">
+    <!-- Card 1: Total Premium Collected -->
+    <div class="bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between transition-colors duration-200" id="kpi-card-collected">
+        <div class="space-y-1">
+            <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Total Premium Collected</p>
+            <h3 class="text-xl font-bold text-gray-900 tracking-tight" id="kpi-collected-value">AED 0</h3>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-teal-50 flex items-center justify-center text-teal-600">
+            <i data-lucide="wallet" class="w-5 h-5"></i>
+        </div>
+    </div>
+
+    <!-- Card 2: Active Clients -->
+    <div class="bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between transition-colors duration-200" id="kpi-card-active-clients">
+        <div class="space-y-1">
+            <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Active Portfolio Size</p>
+            <h3 class="text-xl font-bold text-gray-900 tracking-tight" id="kpi-active-clients">0 Clients</h3>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600">
+            <i data-lucide="users" class="w-5 h-5"></i>
+        </div>
+    </div>
+
+    <!-- Card 3: Outstanding Balance -->
+    <div class="bg-white p-4 rounded-xl border border-gray-200/80 shadow-sm flex items-center justify-between transition-colors duration-200" id="kpi-card-balance">
+        <div class="space-y-1">
+            <p class="text-[11px] text-gray-400 font-bold uppercase tracking-wider">Outstanding Balance</p>
+            <h3 class="text-xl font-bold text-gray-900 tracking-tight" id="kpi-outstanding-balance">AED 0</h3>
+            <p class="text-[10px] text-gray-400 font-semibold" id="kpi-total-commission">AED 0 Earned</p>
+        </div>
+        <div class="w-10 h-10 rounded-lg bg-rose-50 flex items-center justify-center text-rose-600">
+            <i data-lucide="wallet" class="w-5 h-5"></i>
+        </div>
+    </div>
+</div>
+
+<!-- CLIENTS LIST HEADER -->
+<div class="px-6 pt-6 flex items-center justify-between flex-shrink-0">
+    <h2 class="text-sm font-bold text-gray-700">Client Policies</h2>
+    <button id="btn-add-client" class="py-2 px-4 border-2 border-dashed border-teal-300 text-teal-700 hover:bg-teal-50 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+        <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add New Client
+    </button>
+</div>
+
+<!-- CLIENTS GRID -->
+<div class="flex-1 p-6 overflow-y-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 content-start" id="client-list"></div>

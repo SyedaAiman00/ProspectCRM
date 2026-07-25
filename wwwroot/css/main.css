@@ -1,0 +1,54 @@
+/* 1. Theme */
+@import 'theme/variables.css';
+@import 'theme/typography.css';
+@import 'theme/dark-mode.css';
+
+/* 2. Components */
+@import 'components/sidebar.css';
+@import 'components/navbar.css';
+@import 'components/buttons.css';
+@import 'components/modal.css';
+
+/* 3. Pages */
+@import 'pages/dashboard.css';
+@import 'pages/prospects.css';
+@import 'pages/clients.css';
+@import 'pages/auth.css';
+@import 'pages/commissions.css';
+@import 'pages/dropdowns.css';
+
+/* 4. Global Base */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
+::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+/* Admin monitoring mode: Admin can view any agent's data but not act on their
+   behalf, so create/edit controls are hidden while browsing as Admin. */
+body.admin-readonly #btn-add-prospect,
+body.admin-readonly #btn-quick-outreach,
+body.admin-readonly #btn-quick-appointment,
+body.admin-readonly #btn-quick-close,
+body.admin-readonly #btn-add-client,
+body.admin-readonly #btn-edit-target,
+body.admin-readonly .btn-stage-action {
+    display: none !important;
+}
+
+/* Global Dropdowns: only Admins can add/remove values — Agents get a
+   read-only view of the same lists (see Program.cs AdminOnly policy). */
+body:not(.is-admin) .dropdown-add-form,
+body:not(.is-admin) .dropdown-pill-remove {
+    display: none !important;
+}
+
+body.admin-readonly #btn-add-prospect,
+body.admin-readonly #btn-quick-outreach,
+body.admin-readonly #btn-quick-appointment,
+body.admin-readonly #btn-quick-close,
+body.admin-readonly #btn-add-client,
+body.admin-readonly #btn-edit-target,
+body.admin-readonly .btn-stage-action,
+body.admin-readonly .prospect-delete-btn {
+    display: none !important;
+}

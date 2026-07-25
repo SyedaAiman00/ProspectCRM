@@ -1,0 +1,149 @@
+/* ==========================================================================
+   MODAL — shared overlay used by Add New Prospect, Log Outreach, etc.
+   ========================================================================== */
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(15, 23, 42, 0.45);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    animation: modal-fade-in 0.15s ease-out;
+}
+
+.modal-panel {
+    background-color: #ffffff;
+    border-radius: 1rem;
+    width: 100%;
+    max-width: 32rem;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    animation: modal-slide-up 0.18s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.modal-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #111827;
+}
+
+.modal-close-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    color: #9ca3af;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.modal-close-btn:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.modal-body {
+    padding: 1.5rem;
+}
+
+/* Shared form field styling, reused by every modal form */
+.form-label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    color: #6b7280;
+    margin-bottom: 0.35rem;
+}
+
+.form-input {
+    width: 100%;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.6rem;
+    padding: 0.55rem 0.75rem;
+    font-size: 0.875rem;
+    color: #111827;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.form-input:focus {
+    outline: none;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.12);
+}
+/* Native <select> elements (Global Dropdowns categories, Insurance Company,
+   Product, Mode of Payment) — themed to match the app's teal accent since
+   browsers only allow limited restyling of the dropdown control itself. */
+select.form-input {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%230d9488' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    padding-right: 2.25rem;
+    cursor: pointer;
+    accent-color: var(--color-primary);
+}
+
+select.form-input:hover {
+    border-color: #94d5cd;
+}
+
+select.form-input:focus {
+    accent-color: var(--color-primary);
+}
+
+body.canvas-dark-theme select.form-input {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%232dd4bf' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+} 
+
+@keyframes modal-fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes modal-slide-up {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ==========================================================================
+   MODAL — DARK MODE
+   ========================================================================== */
+
+body.canvas-dark-theme .modal-panel {
+    background-color: #1e293b;
+}
+body.canvas-dark-theme .modal-header {
+    border-color: #334155;
+}
+body.canvas-dark-theme .modal-title {
+    color: #ffffff;
+}
+body.canvas-dark-theme .modal-close-btn:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+body.canvas-dark-theme .form-label {
+    color: #94a3b8;
+}
+body.canvas-dark-theme .form-input {
+    background-color: #0f172a;
+    border-color: #334155;
+    color: #f8fafc;
+}
