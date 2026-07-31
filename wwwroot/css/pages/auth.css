@@ -368,3 +368,47 @@ body.auth-page {
     .auth-image-preview { display: none; }
     .auth-right-panel { padding: 32px 24px; }
 }
+
+/* Short-viewport fix: on short screens (e.g. Nest Hub, 1024x600), the
+   fixed-size brand/heading/feature-list block leaves very little height
+   for .auth-image-preview, so object-fit:contain shrinks the dashboard
+   image down and anchors it bottom-left, leaving a big blank gap.
+   Compress the text block so the image keeps most of the vertical space. */
+@media (max-height: 650px) {
+    .auth-left-panel {
+        padding: 20px 32px 12px;
+    }
+
+    .auth-hero-text {
+        margin-top: 8px;
+    }
+
+    .auth-hero-text h1 {
+        font-size: 20px;
+        margin-bottom: 4px;
+    }
+
+    .auth-hero-text p {
+        font-size: 13px;
+    }
+
+    .auth-features-list {
+        margin-top: 8px;
+        gap: 6px;
+    }
+
+    .auth-feature-item {
+        font-size: 12px;
+    }
+
+    .auth-feature-item i,
+    .auth-feature-item svg {
+        width: 20px;
+        height: 20px;
+        padding: 4px;
+    }
+
+    .auth-image-preview {
+        margin-top: 8px;
+    }
+}
