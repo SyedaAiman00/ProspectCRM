@@ -192,6 +192,12 @@ body.auth-page {
     gap: 12px;
 }
 
+@media (max-width: 420px) {
+    .auth-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
 .auth-input-wrapper {
     position: relative;
     display: flex;

@@ -12,17 +12,17 @@ export const ClientCard = (c) => {
     <div class="kanban-prospect-card flex flex-col gap-2" data-client-id="${c.id}">
 
         <!-- Header: Insurance Company / Product + Policy No + Edit/Delete -->
-        <div class="flex items-center justify-between">
-            <div class="flex gap-1">
+        <div class="flex items-center justify-between flex-wrap gap-y-1">
+            <div class="flex gap-1 flex-wrap">
                 <span class="text-[9px] bg-teal-50 text-teal-800 px-1.5 py-0.5 rounded font-bold uppercase">${escapeText(c.insuranceCompany) || 'N/A'}</span>
                 <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-medium">${escapeText(c.productName) || 'N/A'}</span>
             </div>
-            <div class="flex items-center gap-2">
-                <span class="text-[10px] text-gray-400 font-semibold">Policy: ${escapeText(c.policyNo) || 'N/A'}</span>
-                <button type="button" class="client-edit-btn" data-client-id="${c.id}" title="Edit client">
+            <div class="flex items-center gap-2 flex-shrink-0">
+                <span class="text-[10px] text-gray-400 font-semibold truncate max-w-[7rem]">Policy: ${escapeText(c.policyNo) || 'N/A'}</span>
+                <button type="button" class="client-edit-btn flex-shrink-0" data-client-id="${c.id}" title="Edit client">
                     <i data-lucide="pencil" class="w-3 h-3 text-gray-400 hover:text-teal-600"></i>
                 </button>
-                <button type="button" class="client-delete-btn" data-client-id="${c.id}" title="Delete client">
+                <button type="button" class="client-delete-btn flex-shrink-0" data-client-id="${c.id}" title="Delete client">
                     <i data-lucide="trash-2" class="w-3 h-3 text-gray-400 hover:text-rose-600"></i>
                 </button>
             </div>

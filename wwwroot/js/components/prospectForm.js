@@ -7,8 +7,8 @@
 
 export function prospectFormFieldsHtml() {
     return `
-        <form id="prospect-form" class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
+      <form id="prospect-form" class="space-y-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div class="col-span-2">
                     <label class="form-label" for="pf-name">Prospect Name</label>
                     <input class="form-input" type="text" id="pf-name" name="prospectName" required />

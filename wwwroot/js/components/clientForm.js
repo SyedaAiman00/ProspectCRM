@@ -35,7 +35,7 @@ export function clientFormFieldsHtml(prefill = {}) {
 
     return `
         <form id="client-form" class="space-y-4">
-            <div class="grid grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                     <label class="form-label" for="cf-insured-name">Insured Name</label>
                     <input class="form-input" type="text" id="cf-insured-name" name="insuredName" value="${escapeAttr(prefill.insuredName)}" required />
@@ -80,7 +80,7 @@ export function clientFormFieldsHtml(prefill = {}) {
 
             <div class="border-t border-gray-100 pt-4">
                 <p class="text-xs font-bold text-gray-500 uppercase tracking-wide mb-3">Premium &amp; Commission</p>
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="form-label" for="cf-annual-premium">Annual Premium (AED)</label>
                         <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-annual-premium" name="annualPremium" value="${annualPremium}" />
