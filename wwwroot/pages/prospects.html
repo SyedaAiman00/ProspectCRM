@@ -45,10 +45,10 @@
 </div>
 
 <!-- PIPELINE KANBAN BOARD CANVAS AREA (4 COLUMNS) -->
-<div class="flex-1 p-6 overflow-x-auto flex gap-5 items-start" id="view-prospects-canvas">
+<div class="flex-1 p-6 overflow-y-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 items-start" id="view-prospects-canvas">
 
     <!-- Column 1: New / Uncontacted (Pastel Pink) -->
-    <div class="w-72 bg-[#FCE7F3] rounded-2xl p-4 flex flex-col max-h-full border border-pink-200/50 flex-shrink-0">
+    <div class="w-full bg-[#FCE7F3] rounded-2xl p-4 flex flex-col border border-pink-200/50">
         <div class="flex items-center justify-between mb-4 px-1">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-pink-500"></span>
@@ -56,14 +56,14 @@
             </div>
             <span class="bg-white/80 text-pink-700 text-xs px-2.5 py-0.5 rounded-full font-bold shadow-sm" id="count-new">0</span>
         </div>
-        <div class="space-y-3 overflow-y-auto flex-1 pr-1 custom-kanban-stream" id="col-new"></div>
+        <div class="space-y-3 overflow-y-auto max-h-[55vh] pr-1 custom-kanban-stream" id="col-new"></div>
         <button id="btn-add-prospect" class="mt-3 w-full py-2.5 border-2 border-dashed border-pink-300 text-pink-700 hover:bg-white/40 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
             <i data-lucide="plus" class="w-3.5 h-3.5"></i> Add New Prospect
         </button>
     </div>
 
     <!-- Column 2: Contacted / Reached (Pastel Orange/Amber) -->
-    <div class="w-72 bg-[#FEF3C7] rounded-2xl p-4 flex flex-col max-h-full border border-amber-200/50 flex-shrink-0">
+    <div class="w-full bg-[#FEF3C7] rounded-2xl p-4 flex flex-col border border-amber-200/50">
         <div class="flex items-center justify-between mb-4 px-1">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
@@ -71,14 +71,14 @@
             </div>
             <span class="bg-white/80 text-amber-700 text-xs px-2.5 py-0.5 rounded-full font-bold shadow-sm" id="count-contacted">0</span>
         </div>
-        <div class="space-y-3 overflow-y-auto flex-1 pr-1 custom-kanban-stream" id="col-contacted"></div>
+        <div class="space-y-3 overflow-y-auto max-h-[55vh] pr-1 custom-kanban-stream" id="col-contacted"></div>
         <button id="btn-quick-outreach" class="mt-3 w-full py-2.5 border-2 border-dashed border-amber-300 text-amber-800 hover:bg-white/40 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
             <i data-lucide="phone-call" class="w-3.5 h-3.5"></i> Log New Outreach
         </button>
     </div>
 
     <!-- Column 3: In Progress / Quoted (Pastel Lavender/Blue) -->
-    <div class="w-72 bg-[#E0E7FF] rounded-2xl p-4 flex flex-col max-h-full border border-indigo-200/50 flex-shrink-0">
+    <div class="w-full bg-[#E0E7FF] rounded-2xl p-4 flex flex-col border border-indigo-200/50">
         <div class="flex items-center justify-between mb-4 px-1">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-indigo-500"></span>
@@ -86,14 +86,14 @@
             </div>
             <span class="bg-white/80 text-indigo-700 text-xs px-2.5 py-0.5 rounded-full font-bold shadow-sm" id="count-progress">0</span>
         </div>
-        <div class="space-y-3 overflow-y-auto flex-1 pr-1 custom-kanban-stream" id="col-progress"></div>
+        <div class="space-y-3 overflow-y-auto max-h-[55vh] pr-1 custom-kanban-stream" id="col-progress"></div>
         <button id="btn-quick-appointment" class="mt-3 w-full py-2.5 border-2 border-dashed border-indigo-300 text-indigo-800 hover:bg-white/40 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
             <i data-lucide="calendar-plus" class="w-3.5 h-3.5"></i> Schedule Appointment
         </button>
     </div>
 
     <!-- Column 4: Qualified Leads (Pastel Mint) -->
-    <div class="w-72 bg-[#D1FAE5] rounded-2xl p-4 flex flex-col max-h-full border border-emerald-200/50 flex-shrink-0">
+    <div class="w-full bg-[#D1FAE5] rounded-2xl p-4 flex flex-col border border-emerald-200/50">
         <div class="flex items-center justify-between mb-4 px-1">
             <div class="flex items-center gap-2">
                 <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
@@ -101,7 +101,7 @@
             </div>
             <span class="bg-white/80 text-emerald-700 text-xs px-2.5 py-0.5 rounded-full font-bold shadow-sm" id="count-qualified">0</span>
         </div>
-        <div class="space-y-3 overflow-y-auto flex-1 pr-1 custom-kanban-stream" id="col-qualified"></div>
+        <div class="space-y-3 overflow-y-auto max-h-[55vh] pr-1 custom-kanban-stream" id="col-qualified"></div>
         <button id="btn-quick-close" class="mt-3 w-full py-2.5 border-2 border-dashed border-emerald-300 text-emerald-800 hover:bg-white/40 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
             <i data-lucide="check-square" class="w-3.5 h-3.5"></i> Review Closed Pipeline
         </button>
