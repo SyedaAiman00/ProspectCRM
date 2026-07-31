@@ -12,8 +12,8 @@ body.auth-page {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh; /* Lock height to viewport to prevent page scroll */
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-y: auto; /* if content ever exceeds viewport height, scroll instead of clipping/squeezing */
     padding: 20px;
     font-family: 'Inter', sans-serif;
 }
@@ -21,7 +21,8 @@ body.auth-page {
 .auth-container {
     display: flex;
     width: min(92vw, 1100px);
-    height: min(90vh, 700px);
+    height: 700px;
+    max-height: 85vh;
     background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
