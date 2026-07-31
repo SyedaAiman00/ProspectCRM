@@ -9,12 +9,13 @@ import { openModal, closeModal } from '../components/modal.js';
 import { clientFormFieldsHtml, bindClientFormCalculations, bindClientFormDropdowns, readClientFormValues } from '../components/clientForm.js';
 import { paymentFormFieldsHtml, readPaymentFormValue } from '../components/paymentForm.js';
 import { openConfirmModal } from '../components/confirmModal.js';
+import { exportClientsToExcel, exportClientsToPdf } from '../utils/exportClients.js';
 
 import { isAdmin } from '../auth/session.js';
 import { getViewingAgentId } from '../store/state.js';
 
 // Cache of the most recently fetched clients, so edit/delete/payment modals
-// can look up full record details from just a data-client-id.
+// (and the export buttons) can work from the same data without refetching.
 let currentClients = [];
 
 /**
@@ -24,6 +25,7 @@ let currentClients = [];
 export async function initClients() {
     bindAddClientButton();
     bindCardActionButtons();
+    bindExportButton();
 
     const agentId = isAdmin() ? getViewingAgentId() : null;
 
@@ -43,6 +45,52 @@ export async function initClients() {
 function bindAddClientButton() {
     const addBtn = document.getElementById('btn-add-client');
     if (addBtn) addBtn.addEventListener('click', openAddClientModal);
+}
+
+/**
+ * Wires up the Export button's dropdown (Excel / PDF) and closes it when
+ * clicking elsewhere on the page.
+ */
+function bindExportButton() {
+    const exportBtn = document.getElementById('btn-export-clients');
+    const menu = document.getElementById('export-clients-menu');
+    const excelBtn = document.getElementById('export-clients-excel');
+    const pdfBtn = document.getElementById('export-clients-pdf');
+
+    if (!exportBtn || !menu) return;
+
+    exportBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        menu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !exportBtn.contains(e.target)) {
+            menu.classList.add('hidden');
+        }
+    });
+
+    if (excelBtn) {
+        excelBtn.addEventListener('click', () => {
+            if (currentClients.length === 0) {
+                alert('There are no clients to export yet.');
+                return;
+            }
+            exportClientsToExcel(currentClients);
+            menu.classList.add('hidden');
+        });
+    }
+
+    if (pdfBtn) {
+        pdfBtn.addEventListener('click', () => {
+            if (currentClients.length === 0) {
+                alert('There are no clients to export yet.');
+                return;
+            }
+            exportClientsToPdf(currentClients);
+            menu.classList.add('hidden');
+        });
+    }
 }
 
 /**
