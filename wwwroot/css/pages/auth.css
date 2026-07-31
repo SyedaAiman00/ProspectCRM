@@ -130,14 +130,14 @@ body.auth-page {
     overflow: hidden;
 }
 
-.auth-dashboard-img {
-    width: 100%;
-    height: auto;
-    max-height: 100%;
-    object-fit: contain;
-    object-position: bottom left;
-    border-radius: 12px 12px 0 0;
-    box-shadow: 0 10px 25px rgba(13, 148, 136, 0.1);
+.auth-dashboard-img{
+    width:100%;
+    height:auto;
+    max-height:100%;
+    object-fit:contain;
+    object-position:bottom left;
+    transform:scale(1.15);
+    transform-origin:bottom left;
 }
 
 /* RIGHT PANEL (Form) */
