@@ -20,9 +20,9 @@ body.auth-page {
 
 .auth-container {
     display: flex;
-    width: min(92vw, 1100px);
-    height: 700px;
-    max-height: 85vh;
+    width:min(92vw,1200px);
+    height:700px;
+    max-height:90vh;
     background-color: #ffffff;
     border-radius: 20px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.04);
@@ -31,7 +31,7 @@ body.auth-page {
 
 /* LEFT PANEL (Marketing & Embedded Dashboard Image) */
 .auth-left-panel {
-    flex: 1.1;
+    flex:1.25;
     background: linear-gradient(135deg, #eefcf8 0%, #dcf7f0 100%);
     padding: 36px 36px 20px 36px;
     display: flex;
@@ -143,7 +143,7 @@ body.auth-page {
 
 /* RIGHT PANEL (Form) */
 .auth-right-panel {
-    flex: 0.9;
+    flex:0.75;
     padding: 40px;
     display: flex;
     flex-direction: column;
