@@ -1,0 +1,54 @@
+/* ==========================================================================
+   EXPORT DROPDOWN — small menu under the Export button on Clients Board
+   ========================================================================== */
+
+.export-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.65rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    min-width: 12rem;
+    padding: 0.35rem;
+    z-index: 50;
+}
+
+.export-dropdown-menu.hidden {
+    display: none;
+}
+
+.export-dropdown-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.5rem 0.65rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: transparent;
+    color: #374151;
+    font-size: 0.75rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+    text-align: left;
+}
+
+.export-dropdown-item:hover {
+    background-color: #f3f4f6;
+}
+
+body.canvas-dark-theme .export-dropdown-menu {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+
+body.canvas-dark-theme .export-dropdown-item {
+    color: #e2e8f0;
+}
+
+body.canvas-dark-theme .export-dropdown-item:hover {
+    background-color: #334155;
+}
