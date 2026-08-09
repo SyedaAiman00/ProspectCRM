@@ -145,6 +145,45 @@ body.canvas-dark-theme .user-menu-dropdown {
     padding: 1.5rem 0.5rem;
 }
 
+.notifications-view-all-link {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    margin-top: 0.35rem;
+    padding: 0.6rem 0.5rem;
+    border-top: 1px solid #f1f5f9;
+    border-left: none;
+    border-right: none;
+    border-bottom: none;
+    background: transparent;
+    color: var(--color-primary);
+    font-size: 0.72rem;
+    font-weight: 700;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background-color 0.15s ease;
+}
+
+.notifications-view-all-link:hover {
+    background-color: #f0fdfa;
+}
+
+.notifications-view-all-link i {
+    width: 0.7rem;
+    height: 0.7rem;
+}
+
+body.canvas-dark-theme .notifications-view-all-link {
+    border-color: #334155;
+    color: #2dd4bf;
+}
+
+body.canvas-dark-theme .notifications-view-all-link:hover {
+    background-color: #334155;
+}
+
 body.canvas-dark-theme .notifications-dropdown {
     background-color: #1e293b;
     border-color: #334155;

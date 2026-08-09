@@ -10,10 +10,10 @@
  */
 export function renderNotificationsList(policies) {
     if (!policies.length) {
-        return `<p class="notification-empty">No policies expiring in the next 30 days.</p>`;
+        return `<p class="notification-empty">No policies expiring in the next 30 days.</p>` + renderViewAllLink();
     }
 
-    return policies.map((p) => {
+    const itemsHtml = policies.map((p) => {
         const daysLeft = daysUntil(p.policyExpiryDate);
         const urgency = getUrgency(daysLeft);
 
@@ -28,6 +28,23 @@ export function renderNotificationsList(policies) {
             </div>
         `;
     }).join('');
+
+    return itemsHtml + renderViewAllLink();
+}
+
+/**
+ * Footer link inside the notifications dropdown that hands off to the
+ * full Policy Expiry workspace (see pages/policyExpiry.js) — the bell
+ * stays a quick-glance surface, this is the way into the deeper view.
+ * Click handling is bound in app.js, right after this HTML is injected.
+ */
+function renderViewAllLink() {
+    return `
+        <button type="button" id="notifications-view-all-btn" class="notifications-view-all-link">
+            View All Expiring Policies
+            <i data-lucide="arrow-right" class="w-3 h-3"></i>
+        </button>
+    `;
 }
 
 /** @param {string} dateStr @returns {number} */

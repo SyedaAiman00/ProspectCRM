@@ -1,4 +1,4 @@
-import { loadPage } from './router.js';
+import { loadPage, getCurrentPage } from './router.js';
 import { getUser, isAdmin, logout } from './auth/session.js';
 import { initAgentSwitcher } from './components/agentSwitcher.js';
 import { getExpiringClients } from './api/client.js';
@@ -75,9 +75,32 @@ function toggleNotifications(e) {
     if (isOpening) {
         dropdown.innerHTML = renderNotificationsList(expiringPoliciesCache);
         dropdown.classList.remove('hidden');
+        bindViewAllExpiringLink(dropdown);
+        if (window.lucide) lucide.createIcons();
     } else {
         dropdown.classList.add('hidden');
     }
+}
+
+/**
+ * Wires up the "View All Expiring Policies →" footer link rendered inside
+ * the notifications dropdown — closes the dropdown and hands off to the
+ * dedicated Policy Expiry workspace (pages/policyExpiry.js), which already
+ * defaults to the current month on open.
+ * @param {HTMLElement} dropdown
+ */
+function bindViewAllExpiringLink(dropdown) {
+    const link = dropdown.querySelector('#notifications-view-all-btn');
+    if (!link) return;
+
+    link.addEventListener('click', () => {
+        dropdown.classList.add('hidden');
+
+        document.querySelectorAll('.sidebar-link').forEach((navLink) => navLink.classList.remove('active'));
+        document.getElementById('nav-policyExpiry')?.classList.add('active');
+
+        loadPage('policyExpiry');
+    });
 }
 
 function bindTopbarControls() {
