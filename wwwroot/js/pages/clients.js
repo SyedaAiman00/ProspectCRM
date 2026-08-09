@@ -323,7 +323,7 @@ const form = overlay.querySelector('#client-form');
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const dateError = validateClientFormDates(form, true);
+       const dateError = validateClientFormDates(form);
         if (dateError) {
             alert(dateError);
             return;
@@ -375,7 +375,7 @@ function openEditPolicyModal(policy) {
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
-        const dateError = validateClientFormDates(form, false);
+       const dateError = validateClientFormDates(form);
         if (dateError) {
             alert(dateError);
             return;

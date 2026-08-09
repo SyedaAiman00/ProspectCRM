@@ -29,12 +29,6 @@ import {
 export function clientFormFieldsHtml(customerId, prefill = {}) {
     const insuredPersonName = prefill.insuredPersonName || prefill.insuredName || '';
 
-    // Only restrict the issue date to "today or later" when adding a brand
-    // new policy — an existing policy being edited may legitimately have
-    // been issued in the past, so we don't want the picker fighting that.
-    const isEditingExisting = Boolean(prefill.policyIssueDate);
-    const issueDateMinAttr = isEditingExisting ? '' : `min="${todayIso()}"`;
-
     return `
         <form id="client-form" class="space-y-4">
             <input type="hidden" name="customerId" value="${customerId}" />
@@ -77,8 +71,8 @@ export function clientFormFieldsHtml(customerId, prefill = {}) {
                 </div>
 
                 <div>
-                    <label class="form-label" for="cf-policy-date">Policy Issue Date</label>
-                    <input class="form-input" type="date" id="cf-policy-date" name="policyIssueDate" value="${toDateInputValue(prefill.policyIssueDate)}" ${issueDateMinAttr} />
+                   <label class="form-label" for="cf-policy-date">Policy Issue Date</label>
+                    <input class="form-input" type="date" id="cf-policy-date" name="policyIssueDate" value="${toDateInputValue(prefill.policyIssueDate)}" />
                 </div>
                 <div>
                     <label class="form-label" for="cf-policy-expiry-date">Policy Expiry Date</label>
@@ -245,16 +239,12 @@ export function bindClientFormDateGuards(formEl) {
  * Validates the issue/expiry date relationship before submit — a friendly
  * alert instead of relying purely on native picker constraints.
  * @param {HTMLElement} formEl
- * @param {boolean} isNewPolicy - only new policies get the "can't be in the past" issue-date check
+
  * @returns {string|null} error message, or null if valid
  */
-export function validateClientFormDates(formEl, isNewPolicy) {
+export function validateClientFormDates(formEl) {
     const issueDate = formEl.querySelector('#cf-policy-date').value;
     const expiryDate = formEl.querySelector('#cf-policy-expiry-date').value;
-
-    if (isNewPolicy && issueDate && issueDate < todayIso()) {
-        return 'Policy issue date cannot be in the past.';
-    }
 
     if (issueDate && expiryDate && expiryDate < issueDate) {
         return 'Policy expiry date cannot be before the issue date.';
@@ -301,10 +291,6 @@ export function readClientFormValues(formEl) {
 function toDateInputValue(value) {
     if (!value) return '';
     return value.toString().split('T')[0]; // "2026-08-10T00:00:00" -> "2026-08-10"
-}
-
-function todayIso() {
-    return new Date().toISOString().split('T')[0];
 }
 
 function escapeAttr(value) {

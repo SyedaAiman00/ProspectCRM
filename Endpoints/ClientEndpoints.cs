@@ -103,14 +103,6 @@ public static class ClientEndpoints
                 return Results.BadRequest("Insured name is required.");
             }
 
-            // Only enforced on brand-new policies — editing an existing one
-            // (which may legitimately have been issued before this rule
-            // existed) skips this check; see the PUT handler below.
-            if (request.PolicyIssueDate.HasValue && request.PolicyIssueDate.Value.Date < DateTime.UtcNow.Date)
-            {
-                return Results.BadRequest("Policy issue date cannot be in the past.");
-            }
-
             if (request.PolicyExpiryDate.HasValue && request.PolicyIssueDate.HasValue
                 && request.PolicyExpiryDate.Value.Date < request.PolicyIssueDate.Value.Date)
             {
