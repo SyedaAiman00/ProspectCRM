@@ -14,3 +14,52 @@ body.canvas-dark-theme #pe-month-label,
 body.canvas-dark-theme #pe-policy-list h4 {
     color: #ffffff !important;
 }
+
+/* ==========================================================================
+   POLICY EXPIRY — FILTER PILLS
+   Small toggle-button group above the policy list, styled to match the
+   app's existing pill/badge language (dropdown pills, urgency badges).
+   ========================================================================== */
+
+.pe-filter-pill {
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    border: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    color: #6b7280;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.pe-filter-pill:hover {
+    background-color: #f9fafb;
+    color: #111827;
+}
+
+.pe-filter-pill.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #ffffff;
+}
+
+body.canvas-dark-theme .pe-filter-pill {
+    background-color: #1e293b;
+    border-color: #334155;
+    color: #94a3b8;
+}
+
+body.canvas-dark-theme .pe-filter-pill:hover {
+    background-color: #334155;
+    color: #ffffff;
+}
+
+body.canvas-dark-theme .pe-filter-pill.active {
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
+    color: #ffffff;
+} 

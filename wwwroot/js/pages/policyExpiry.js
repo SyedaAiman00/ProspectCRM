@@ -14,13 +14,28 @@ import {
 } from '../utils/expiryUrgency.js';
 
 // Cache of the most recently fetched policies (grouped by expiry month)
-// and customers, so switching months doesn't need a refetch.
+// and customers, so switching months/filters doesn't need a refetch.
 let currentCustomers = [];
 let policiesByMonth = {};
 
 // The month currently being viewed — always normalized to the 1st of
 // the month so comparisons/formatting stay simple.
 let selectedMonth = startOfMonth(new Date());
+
+// 'all' | one of EXPIRY_URGENCY values
+let selectedUrgencyFilter = 'all';
+
+// Free-text search, already lowercased for matching.
+let searchQuery = '';
+
+const FILTERS = [
+    { key: 'all', label: 'All' },
+    { key: EXPIRY_URGENCY.EXPIRED, label: 'Expired' },
+    { key: EXPIRY_URGENCY.CRITICAL, label: 'Critical' },
+    { key: EXPIRY_URGENCY.URGENT, label: 'Urgent' },
+    { key: EXPIRY_URGENCY.UPCOMING, label: 'Upcoming' },
+    { key: EXPIRY_URGENCY.PLANNED, label: 'Planned' },
+];
 
 /**
  * Entry point for the Policy Expiry page. Called by router.js
@@ -30,8 +45,15 @@ let selectedMonth = startOfMonth(new Date());
  */
 export async function initPolicyExpiry() {
     bindMonthNavButtons();
+    renderFilterPills();
+    bindSearchInput();
 
     selectedMonth = startOfMonth(new Date()); // always default to the current month on (re)entry
+    selectedUrgencyFilter = 'all';
+    searchQuery = '';
+
+    const searchInput = document.getElementById('pe-search-input');
+    if (searchInput) searchInput.value = '';
 
     const agentId = isAdmin() ? getViewingAgentId() : null;
 
@@ -65,8 +87,56 @@ function bindMonthNavButtons() {
 }
 
 /**
+ * Renders the filter pill row once. Re-renders happen only on click,
+ * where each pill's own active state is toggled directly instead of
+ * rebuilding the whole row.
+ */
+function renderFilterPills() {
+    const container = document.getElementById('pe-filter-pills');
+    if (!container) return;
+
+    container.innerHTML = FILTERS.map(({ key, label }) => `
+        <button type="button" class="pe-filter-pill ${key === selectedUrgencyFilter ? 'active' : ''}" data-filter-key="${key}">
+            ${label}
+        </button>
+    `).join('');
+
+    container.querySelectorAll('.pe-filter-pill').forEach((btn) => {
+        btn.addEventListener('click', () => {
+            selectedUrgencyFilter = btn.dataset.filterKey;
+            container.querySelectorAll('.pe-filter-pill').forEach((b) => {
+                b.classList.toggle('active', b.dataset.filterKey === selectedUrgencyFilter);
+            });
+            renderMonth();
+        });
+    });
+}
+
+/**
+ * Wires up the search box with a light debounce so re-rendering the list
+ * doesn't happen on every single keystroke.
+ */
+function bindSearchInput() {
+    const input = document.getElementById('pe-search-input');
+    if (!input || input.dataset.bound) return;
+
+    let debounceTimer;
+    input.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            searchQuery = input.value.trim().toLowerCase();
+            renderMonth();
+        }, 200);
+    });
+
+    input.dataset.bound = 'true'; // guard against double-binding across re-inits
+}
+
+/**
  * Renders the month label, summary counts, and policy list for whatever
- * month is currently selected.
+ * month is currently selected. The summary always reflects the FULL month
+ * (unaffected by filter/search) so the agent keeps a true picture of the
+ * month's workload; only the list below is narrowed by filter/search.
  */
 function renderMonth() {
     const labelEl = document.getElementById('pe-month-label');
@@ -77,13 +147,41 @@ function renderMonth() {
         .sort((a, b) => new Date(a.policyExpiryDate) - new Date(b.policyExpiryDate));
 
     renderSummary(monthPolicies);
-    renderPolicyList(monthPolicies);
+    renderPolicyList(applyFilters(monthPolicies));
 
     if (window.lucide) lucide.createIcons();
 }
 
 /**
  * @param {object[]} monthPolicies
+ * @returns {object[]}
+ */
+function applyFilters(monthPolicies) {
+    return monthPolicies.filter((p) => {
+        if (selectedUrgencyFilter !== 'all' && getExpiryUrgency(p.policyExpiryDate) !== selectedUrgencyFilter) {
+            return false;
+        }
+
+        if (searchQuery) {
+            const customer = currentCustomers.find((c) => c.id === p.customerId);
+            const haystack = [
+                customer?.name,
+                p.insuredPersonName,
+                p.insuredName,
+                p.policyNo,
+                p.insuranceCompany,
+                p.productName,
+            ].filter(Boolean).join(' ').toLowerCase();
+
+            if (!haystack.includes(searchQuery)) return false;
+        }
+
+        return true;
+    });
+}
+
+/**
+ * @param {object[]} monthPolicies - the FULL month's policies, unfiltered
  */
 function renderSummary(monthPolicies) {
     const container = document.getElementById('pe-summary');
@@ -126,18 +224,18 @@ function renderSummary(monthPolicies) {
 }
 
 /**
- * @param {object[]} monthPolicies
+ * @param {object[]} filteredPolicies - already narrowed by urgency filter + search
  */
-function renderPolicyList(monthPolicies) {
+function renderPolicyList(filteredPolicies) {
     const container = document.getElementById('pe-policy-list');
     if (!container) return;
 
-    if (!monthPolicies.length) {
-        container.innerHTML = `<p class="text-sm text-gray-400 text-center py-10">No policies expiring this month.</p>`;
+    if (!filteredPolicies.length) {
+        container.innerHTML = `<p class="text-sm text-gray-400 text-center py-10">No policies match the current filter/search.</p>`;
         return;
     }
 
-    container.innerHTML = monthPolicies.map(renderPolicyRow).join('');
+    container.innerHTML = filteredPolicies.map(renderPolicyRow).join('');
 
     container.querySelectorAll('.pe-view-client-btn').forEach((btn) => {
         btn.addEventListener('click', () => goToClientsBoard());
@@ -195,9 +293,7 @@ function renderPolicyRow(p) {
 /**
  * Basic connection into the existing Clients Board — switches the SPA
  * to the Clients page, where the agent can find the customer/policy
- * via the existing customer cards. Deeper deep-linking (auto-expanding
- * the specific customer card) can be layered on later without touching
- * this page's structure.
+ * via the existing customer cards.
  */
 function goToClientsBoard() {
     document.querySelectorAll('.sidebar-link').forEach((link) => link.classList.remove('active'));
