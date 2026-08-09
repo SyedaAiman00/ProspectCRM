@@ -1,13 +1,12 @@
 /**
- * The Client Policy form — shared by both "Add New Client" (blank) and
- * "Convert to Client" (prefilled from a closed prospect). Live-calculates
- * VAT, Total Premium, Total Commission, and Agent Commission as the agent
- * types, using the same pure functions the Premium Calculator will use.
+ * The Policy form — captures one product/policy under an existing Customer.
+ * Shared by "Add New Policy" (blank, under a chosen customer) and
+ * "Edit Policy" (prefilled). Live-calculates VAT, Total Premium, Total
+ * Commission, and Agent Commission as the agent types.
  *
  * Insurance Company, Product Name, and Mode of Payment pull their options
  * from the Global Dropdowns categories (see utils/dropdownSelect.js) instead
- * of being hardcoded — each also offers an "Other (type your own)" fallback
- * so an agent is never blocked waiting on an Admin to add a missing value.
+ * of being hardcoded — each also offers an "Other (type your own)" fallback.
  */
 import {
     calculateVat,
@@ -23,22 +22,21 @@ import {
 } from '../utils/dropdownSelect.js';
 
 /**
- * @param {object} [prefill] - optional partial data to prefill (e.g. from a converted prospect, or an existing client being edited)
+ * @param {number} customerId - which Customer this policy belongs to
+ * @param {object} [prefill] - optional partial data to prefill (e.g. from a converted prospect, or an existing policy being edited)
  * @returns {string}
  */
-export function clientFormFieldsHtml(prefill = {}) {
-    const annualPremium = prefill.annualPremium ?? 0;
-    const policyFee = prefill.policyFee ?? 0;
-    const basmah = prefill.basmah ?? 19;
-    const collectedPremium = prefill.collectedPremium ?? 0;
-    const commRate = prefill.commRate ?? 0;
+export function clientFormFieldsHtml(customerId, prefill = {}) {
+    const insuredPersonName = prefill.insuredPersonName || prefill.insuredName || '';
 
     return `
         <form id="client-form" class="space-y-4">
+            <input type="hidden" name="customerId" value="${customerId}" />
+
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                    <label class="form-label" for="cf-insured-name">Insured Name</label>
-                    <input class="form-input" type="text" id="cf-insured-name" name="insuredName" value="${escapeAttr(prefill.insuredName)}" required />
+                    <label class="form-label" for="cf-insured-name">Insured Person Name</label>
+                    <input class="form-input" type="text" id="cf-insured-name" name="insuredPersonName" value="${escapeAttr(insuredPersonName)}" placeholder="e.g. Self, Spouse, Owner..." required />
                 </div>
                 <div>
                     <label class="form-label" for="cf-sponsor">Sponsor Details</label>
@@ -69,7 +67,7 @@ export function clientFormFieldsHtml(prefill = {}) {
                     <input class="form-input" type="date" id="cf-policy-date" name="policyIssueDate" value="${escapeAttr(prefill.policyIssueDate)}" />
                 </div>
 
-                <div class="col-span-2">
+                <div class="col-span-1 sm:col-span-2">
                     <label class="form-label" for="cf-payment-mode">Mode of Payment</label>
                     <select class="form-input dropdown-select" id="cf-payment-mode" data-category="payment_mode">
                         <option value="">Loading...</option>
@@ -83,25 +81,25 @@ export function clientFormFieldsHtml(prefill = {}) {
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                         <label class="form-label" for="cf-annual-premium">Annual Premium (AED)</label>
-                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-annual-premium" name="annualPremium" value="${annualPremium}" />
+                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-annual-premium" name="annualPremium" value="${prefill.annualPremium ?? 0}" />
                     </div>
                     <div>
                         <label class="form-label" for="cf-policy-fee">Policy Fee (AED)</label>
-                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-policy-fee" name="policyFee" value="${policyFee}" />
+                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-policy-fee" name="policyFee" value="${prefill.policyFee ?? 0}" />
                     </div>
 
                     <div>
                         <label class="form-label" for="cf-basmah">BASMAH (AED)</label>
-                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-basmah" name="basmah" value="${basmah}" />
+                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-basmah" name="basmah" value="${prefill.basmah ?? 19}" />
                     </div>
                     <div>
                         <label class="form-label" for="cf-collected">Collected Premium (AED)</label>
-                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-collected" name="collectedPremium" value="${collectedPremium}" />
+                        <input class="form-input calc-input" type="number" step="0.01" min="0" id="cf-collected" name="collectedPremium" value="${prefill.collectedPremium ?? 0}" />
                     </div>
 
                     <div>
                         <label class="form-label" for="cf-comm-rate">Comm Rate (%)</label>
-                        <input class="form-input calc-input" type="number" step="0.01" min="0" max="100" id="cf-comm-rate" name="commRate" value="${commRate}" />
+                        <input class="form-input calc-input" type="number" step="0.01" min="0" max="100" id="cf-comm-rate" name="commRate" value="${prefill.commRate ?? 0}" />
                     </div>
                     <div>
                         <label class="form-label" for="cf-agent-split">Agent Split (%)</label>
@@ -139,7 +137,7 @@ export function clientFormFieldsHtml(prefill = {}) {
                     Cancel
                 </button>
                 <button type="submit" class="py-2 px-4 rounded-lg text-sm font-semibold text-white bg-teal-600 hover:bg-teal-700 transition-all">
-                    Save Client
+                    Save Policy
                 </button>
             </div>
         </form>
@@ -171,7 +169,7 @@ export async function bindClientFormDropdowns(formEl, prefill = {}) {
             bindDropdownOtherToggle(selectEl);
         });
     } catch (err) {
-        console.error('Failed to load dropdown options for client form:', err);
+        console.error('Failed to load dropdown options for policy form:', err);
         fields.forEach(({ selectId }) => {
             const selectEl = formEl.querySelector(`#${selectId}`);
             if (selectEl) selectEl.innerHTML = `<option value="">Failed to load options</option>`;
@@ -213,21 +211,23 @@ export function bindClientFormCalculations(formEl) {
     recalculate(); // run once immediately so the panel isn't blank on open
 }
 
-
- /**
+/**
  * Reads the form's raw inputs into a plain object matching the backend's
  * Create/UpdateClientRequest shape. Derived fields (VAT, Total Premium,
  * Total Commission, Agent Commission, Balance) are intentionally NOT sent —
- * the backend recalculates all of them server-side from these raw inputs,
- * so this is just for the agent's live preview, never what gets trusted.
+ * the backend recalculates all of them server-side. insuredName is kept in
+ * sync with insuredPersonName since the backend still requires both.
  * @param {HTMLFormElement} formEl
  * @returns {object}
  */
 export function readClientFormValues(formEl) {
     const formData = new FormData(formEl);
+    const insuredPersonName = formData.get('insuredPersonName')?.trim() || '';
 
     return {
-        insuredName: formData.get('insuredName')?.trim() || '',
+        customerId: Number(formData.get('customerId')),
+        insuredPersonName,
+        insuredName: insuredPersonName,
         sponsorDetails: formData.get('sponsorDetails')?.trim() || null,
         insuranceCompany: readDropdownValue(formEl.querySelector('#cf-company')),
         productName: readDropdownValue(formEl.querySelector('#cf-product')),
