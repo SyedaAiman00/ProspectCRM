@@ -1,0 +1,16 @@
+/* ==========================================================================
+   POLICY EXPIRY — DARK MODE
+   Same card/summary treatment as other workspace pages (Clients, Commissions).
+   ========================================================================== */
+
+body.canvas-dark-theme #pe-month-nav,
+body.canvas-dark-theme #pe-summary-card,
+body.canvas-dark-theme #pe-policy-list > div {
+    background-color: #1e293b !important;
+    border-color: #334155 !important;
+}
+
+body.canvas-dark-theme #pe-month-label,
+body.canvas-dark-theme #pe-policy-list h4 {
+    color: #ffffff !important;
+}

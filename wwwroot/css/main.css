@@ -17,6 +17,7 @@
 @import 'pages/auth.css';
 @import 'pages/commissions.css';
 @import 'pages/dropdowns.css';
+@import 'pages/policyExpiry.css';
 
 /* 4. Global Base */
 ::-webkit-scrollbar { width: 6px; height: 6px; }

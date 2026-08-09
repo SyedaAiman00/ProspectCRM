@@ -6,7 +6,21 @@
     </div>
 </div>
 
-<!-- Month navigator + summary will be built here in the next step -->
-<div class="flex-1 p-6 overflow-y-auto" id="policy-expiry-content">
-    <p class="text-sm text-gray-400 text-center py-10">Policy Expiry workspace coming online...</p>
+<!-- MONTH NAVIGATOR -->
+<div class="px-6 pt-5 flex-shrink-0">
+    <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm px-4 py-3 flex items-center justify-between" id="pe-month-nav">
+        <button type="button" id="pe-prev-month" class="topbar-utility-btn" title="Previous month">
+            <i data-lucide="chevron-left"></i>
+        </button>
+        <h3 class="text-base font-bold text-gray-900" id="pe-month-label">—</h3>
+        <button type="button" id="pe-next-month" class="topbar-utility-btn" title="Next month">
+            <i data-lucide="chevron-right"></i>
+        </button>
+    </div>
 </div>
+
+<!-- MONTH SUMMARY -->
+<div class="px-6 pt-5 flex-shrink-0" id="pe-summary"></div>
+
+<!-- POLICY LIST -->
+<div class="flex-1 px-6 py-5 overflow-y-auto space-y-3" id="pe-policy-list"></div>
