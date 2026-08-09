@@ -62,4 +62,30 @@ body.canvas-dark-theme .pe-filter-pill.active {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
     color: #ffffff;
-} 
+}
+
+/* ==========================================================================
+   POLICY EXPIRY — RESPONSIVE
+   The overall shell/sidebar responsiveness is handled globally by
+   components/responsive.css; this only tightens up spacing specific to
+   this page's own month nav + filter row on narrow viewports.
+   ========================================================================== */
+
+@media (max-width: 480px) {
+    #pe-month-nav {
+        padding: 0.6rem 0.85rem;
+    }
+
+    #pe-month-label {
+        font-size: 0.9rem;
+    }
+
+    #pe-filter-pills {
+        gap: 0.35rem;
+    }
+
+    .pe-filter-pill {
+        font-size: 0.65rem;
+        padding: 0.3rem 0.6rem;
+    }
+}

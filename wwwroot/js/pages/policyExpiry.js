@@ -261,7 +261,7 @@ function renderPolicyRow(p) {
             : `${days} day${days === 1 ? '' : 's'} remaining`;
 
     return `
-        <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-4 flex items-center justify-between gap-4 flex-wrap">
+        <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2 flex-wrap">
                     <h4 class="font-bold text-gray-900 text-sm truncate">${escapeText(customerName)}</h4>
@@ -274,15 +274,15 @@ function renderPolicyRow(p) {
                 </div>
             </div>
 
-            <div class="flex items-center gap-4 flex-shrink-0">
-                <div class="text-right">
+            <div class="flex items-center justify-between sm:justify-end gap-4 flex-shrink-0">
+                <div class="text-left sm:text-right">
                     <p class="text-xs font-semibold text-gray-700">${new Date(p.policyExpiryDate).toLocaleDateString()}</p>
                     <p class="text-[11px] text-gray-400">${daysLabel}</p>
                 </div>
 
                 <span class="text-[10px] font-bold px-2 py-1 rounded-full whitespace-nowrap ${meta.badgeClass}">${meta.label}</span>
 
-                <button type="button" class="pe-view-client-btn py-1.5 px-3 rounded-lg text-xs font-semibold text-teal-700 border border-teal-200 hover:bg-teal-50 transition-all" data-customer-id="${p.customerId ?? ''}">
+                <button type="button" class="pe-view-client-btn py-1.5 px-3 rounded-lg text-xs font-semibold text-teal-700 border border-teal-200 hover:bg-teal-50 transition-all flex-shrink-0" data-customer-id="${p.customerId ?? ''}">
                     View Client
                 </button>
             </div>
