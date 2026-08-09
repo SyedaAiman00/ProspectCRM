@@ -24,17 +24,24 @@ public static class AuthEndpoints
                 return Results.BadRequest("Name, email, and password are all required.");
             }
 
-            var existing = await userManager.FindByEmailAsync(request.Email);
+            var normalizedEmail = request.Email.Trim();
+            if (!EmailValidator.IsValidFormat(normalizedEmail))
+            {
+                return Results.BadRequest("Please enter a valid email address.");
+            }
+
+            var existing = await userManager.FindByEmailAsync(normalizedEmail);
+
             if (existing is not null)
             {
                 return Results.Conflict("An account with this email already exists.");
             }
 
-            var newUser = new User
+           var newUser = new User
             {
-                UserName = request.Email, // Identity requires a UserName — email doubles as it here
-                Email = request.Email,
-                Name = request.Name,
+                UserName = normalizedEmail, // Identity requires a UserName — email doubles as it here
+                Email = normalizedEmail,
+                Name = request.Name.Trim(),
             };
 
             var createResult = await userManager.CreateAsync(newUser, request.Password);

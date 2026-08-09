@@ -133,6 +133,11 @@ async function handleSignupSubmit(e) {
     const email = document.getElementById('email').value.trim();
     const password = document.getElementById('password').value;
 
+    if (!isValidEmailFormat(email)) {
+        alert('Please enter a valid email address.');
+        return;
+    }
+
     submitBtn.disabled = true;
     submitBtn.textContent = 'Creating account...';
 
@@ -256,4 +261,16 @@ async function handleGoogleCredentialResponse(response) {
             'Something went wrong signing in with Google. Please try again.'
         );
     }
+}
+
+/**
+ * Same lenient format check as the backend's EmailValidator — catches
+ * obviously malformed input immediately, before a network round-trip.
+ * Doesn't and can't catch domain typos like "gmmail.com" — that's a real
+ * address, just not the one they meant.
+ * @param {string} email
+ * @returns {boolean}
+ */
+function isValidEmailFormat(email) {
+    return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
 }
