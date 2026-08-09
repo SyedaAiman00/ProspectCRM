@@ -23,6 +23,26 @@ export async function getClient(id) {
     return response.json();
 }
 
+export async function getExpiringClients(withinDays = 30, agentId = null) {
+    const params = new URLSearchParams();
+    params.set('withinDays', withinDays);
+
+    if (agentId) {
+        params.set('agentId', agentId);
+    }
+
+    const response = await apiFetch(
+        `${BASE_URL}/expiring?${params.toString()}`
+    );
+
+    if (!response.ok) {
+        throw new Error(
+            `Failed to fetch expiring policies (status ${response.status})`
+        );
+    }
+
+    return response.json();
+}
 export async function createClient(clientData) {
     const response = await apiFetch(BASE_URL, {
         method: 'POST',
