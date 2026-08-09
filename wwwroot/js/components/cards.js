@@ -94,6 +94,7 @@ export const PolicyRow = (p) => {
                     <span class="text-[9px] bg-teal-50 text-teal-800 px-1.5 py-0.5 rounded font-bold uppercase">${escapeText(p.productName) || 'N/A'}</span>
                     <span class="text-[9px] bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded font-medium">${escapeText(p.insuranceCompany) || 'N/A'}</span>
                 </div>
+                ${p.policyExpiryDate ? `<p class="text-[10px] mt-1 ${expiryUrgencyClass(p.policyExpiryDate)}">Expires ${new Date(p.policyExpiryDate).toLocaleDateString()}</p>` : ''}
             </div>
             <div class="flex items-center gap-1.5 flex-shrink-0">
                 <button type="button" class="policy-edit-btn" data-policy-id="${p.id}" title="Edit policy">
@@ -225,6 +226,20 @@ function renderStageActionButton(p) {
 /** @param {string|null|undefined} value */
 function escapeAttr(value) {
     return (value || '').toString().replace(/"/g, '&quot;');
+}
+
+/** @param {string} dateStr */
+function expiryUrgencyClass(dateStr) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const expiry = new Date(dateStr);
+    expiry.setHours(0, 0, 0, 0);
+    const daysLeft = Math.round((expiry - today) / (1000 * 60 * 60 * 24));
+
+    if (daysLeft <= 3) return 'text-rose-600 font-bold';
+    if (daysLeft <= 14) return 'text-amber-600 font-semibold';
+    if (daysLeft <= 30) return 'text-teal-700 font-medium';
+    return 'text-gray-400';
 }
 
 /**

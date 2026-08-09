@@ -30,6 +30,62 @@ public static class ClientEndpoints
             return Results.Ok(clients);
         }).RequireAuthorization();
 
+        // Policies expiring within the next N days (default 30) — powers the
+        // notification bell. Returned with the owning customer's name attached,
+        // since the raw Client entity has no navigation property to Customer.
+        group.MapGet("/expiring", async (AppDbContext db, ClaimsPrincipal caller, int? agentId, int withinDays = 30) =>
+        {
+            var today = DateTime.UtcNow.Date;
+            var cutoff = today.AddDays(withinDays);
+
+            IQueryable<Client> query = db.Clients.Where(c =>
+                c.PolicyExpiryDate != null &&
+                c.PolicyExpiryDate.Value.Date >= today &&
+                c.PolicyExpiryDate.Value.Date <= cutoff);
+
+            if (caller.IsAdmin())
+            {
+                if (agentId.HasValue) query = query.Where(c => c.AgentId == agentId.Value);
+            }
+            else
+            {
+                query = query.Where(c => c.AgentId == caller.GetUserId());
+            }
+
+            var policies = await query.OrderBy(c => c.PolicyExpiryDate).ToListAsync();
+
+            var customerIds = policies.Where(p => p.CustomerId.HasValue).Select(p => p.CustomerId!.Value).Distinct().ToList();
+            var customerNames = await db.Customers
+                .Where(cu => customerIds.Contains(cu.Id))
+                .ToDictionaryAsync(cu => cu.Id, cu => cu.Name);
+
+            var result = policies.Select(p => new ExpiringPolicyDto(
+                p.Id,
+                p.CustomerId.HasValue && customerNames.TryGetValue(p.CustomerId.Value, out var name) ? name : "Unknown",
+                p.InsuredPersonName ?? p.InsuredName,
+                p.ProductName,
+                p.PolicyNo,
+                p.PolicyExpiryDate
+            ));
+
+            return Results.Ok(result);
+        }).RequireAuthorization();
+
+        // All policies belonging to one customer — powers the customer's
+        // expanded policy list on the Clients Board.
+        group.MapGet("/by-customer/{customerId:int}", async (int customerId, AppDbContext db, ClaimsPrincipal caller) =>
+        {
+            var customer = await db.Customers.FindAsync(customerId);
+            if (customer is null) return Results.NotFound();
+            if (!caller.IsAdmin() && customer.AgentId != caller.GetUserId()) return Results.Forbid();
+
+            var policies = await db.Clients
+                .Where(c => c.CustomerId == customerId)
+                .ToListAsync();
+
+            return Results.Ok(policies);
+        }).RequireAuthorization();
+
         // An Agent may only fetch their own client; an Admin may fetch any.
         group.MapGet("/{id:int}", async (int id, AppDbContext db, ClaimsPrincipal caller) =>
         {
@@ -45,6 +101,20 @@ public static class ClientEndpoints
             if (string.IsNullOrWhiteSpace(request.InsuredName))
             {
                 return Results.BadRequest("Insured name is required.");
+            }
+
+            // Only enforced on brand-new policies — editing an existing one
+            // (which may legitimately have been issued before this rule
+            // existed) skips this check; see the PUT handler below.
+            if (request.PolicyIssueDate.HasValue && request.PolicyIssueDate.Value.Date < DateTime.UtcNow.Date)
+            {
+                return Results.BadRequest("Policy issue date cannot be in the past.");
+            }
+
+            if (request.PolicyExpiryDate.HasValue && request.PolicyIssueDate.HasValue
+                && request.PolicyExpiryDate.Value.Date < request.PolicyIssueDate.Value.Date)
+            {
+                return Results.BadRequest("Policy expiry date cannot be before the issue date.");
             }
 
             var customer = await db.Customers.FindAsync(request.CustomerId);
@@ -69,6 +139,7 @@ public static class ClientEndpoints
                 SponsorDetails = request.SponsorDetails,
                 InsuredName = request.InsuredName,
                 PolicyIssueDate = request.PolicyIssueDate,
+                PolicyExpiryDate = request.PolicyExpiryDate,
                 PolicyNo = request.PolicyNo,
                 ModeOfPayment = request.ModeOfPayment,
                 Remarks = request.Remarks,
@@ -81,13 +152,14 @@ public static class ClientEndpoints
 
             return Results.Created($"/api/clients/{newClient.Id}", newClient);
         }).RequireAuthorization();
+
         // Full update of a client policy — used for correcting a typo, recording
         // a new payment against the balance, or updating any policy detail.
         // Same ownership rule as everywhere else: Agents only touch their own,
         // Admins can touch any. All premium/commission math is recomputed here
-        // server-side — the request's raw inputs (annual premium, comm rate,
-        // agent split, etc.) are trusted; any derived totals the client sends
-        // are ignored.
+        // server-side. Note: unlike Create, this does NOT reject a past issue
+        // date — an existing policy may have legitimately been issued before
+        // today, and editing it shouldn't retroactively become impossible.
         group.MapPut("/{id:int}", async (int id, AppDbContext db, ClaimsPrincipal caller, UpdateClientRequest request) =>
         {
             var client = await db.Clients.FindAsync(id);
@@ -97,6 +169,12 @@ public static class ClientEndpoints
             if (string.IsNullOrWhiteSpace(request.InsuredName))
             {
                 return Results.BadRequest("Insured name is required.");
+            }
+
+            if (request.PolicyExpiryDate.HasValue && request.PolicyIssueDate.HasValue
+                && request.PolicyExpiryDate.Value.Date < request.PolicyIssueDate.Value.Date)
+            {
+                return Results.BadRequest("Policy expiry date cannot be before the issue date.");
             }
 
             var customer = await db.Customers.FindAsync(request.CustomerId);
@@ -118,6 +196,7 @@ public static class ClientEndpoints
             client.SponsorDetails = request.SponsorDetails;
             client.InsuredName = request.InsuredName;
             client.PolicyIssueDate = request.PolicyIssueDate;
+            client.PolicyExpiryDate = request.PolicyExpiryDate;
             client.PolicyNo = request.PolicyNo;
             client.ModeOfPayment = request.ModeOfPayment;
             client.Remarks = request.Remarks;
@@ -128,6 +207,7 @@ public static class ClientEndpoints
 
             return Results.Ok(client);
         }).RequireAuthorization();
+
         // Quick, single-field update — just recording a new payment against the
         // balance without re-submitting the entire policy form.
         group.MapPatch("/{id:int}/payment", async (int id, AppDbContext db, ClaimsPrincipal caller, RecordPaymentRequest payment) =>
@@ -181,23 +261,6 @@ public static class ClientEndpoints
                 await db.SaveChangesAsync();
                 return Results.Ok("Test Client successfully saved to MySQL Workbench!");
             });
-
-
-            // All policies belonging to one customer — powers the customer's
-        // expanded policy list on the Clients Board.
-        group.MapGet("/by-customer/{customerId:int}", async (int customerId, AppDbContext db, ClaimsPrincipal caller) =>
-        {
-            var customer = await db.Customers.FindAsync(customerId);
-            if (customer is null) return Results.NotFound();
-            if (!caller.IsAdmin() && customer.AgentId != caller.GetUserId()) return Results.Forbid();
-
-            var policies = await db.Clients
-                .Where(c => c.CustomerId == customerId)
-                .ToListAsync();
-
-            return Results.Ok(policies);
-        }).RequireAuthorization();
-        
         }
     }
 
@@ -234,10 +297,6 @@ public static class ClientEndpoints
     }
 }
 
-/// <summary>
-/// Shared shape for the raw financial inputs both Create and Update requests
-/// carry — lets ApplyCalculatedFinancials accept either without duplicating it.
-/// </summary>
 public interface IClientFinancialInputs
 {
     decimal? AnnualPremium { get; }
@@ -256,6 +315,7 @@ public record CreateClientRequest(
     string? SponsorDetails,
     string InsuredName,
     DateTime? PolicyIssueDate,
+    DateTime? PolicyExpiryDate,
     string PolicyNo,
     string ModeOfPayment,
     decimal? AnnualPremium,
@@ -275,6 +335,7 @@ public record UpdateClientRequest(
     string? SponsorDetails,
     string InsuredName,
     DateTime? PolicyIssueDate,
+    DateTime? PolicyExpiryDate,
     string PolicyNo,
     string ModeOfPayment,
     decimal? AnnualPremium,
@@ -287,3 +348,12 @@ public record UpdateClientRequest(
 ) : IClientFinancialInputs;
 
 public record RecordPaymentRequest(decimal Amount);
+
+public record ExpiringPolicyDto(
+    int Id,
+    string CustomerName,
+    string InsuredPersonName,
+    string ProductName,
+    string PolicyNo,
+    DateTime? PolicyExpiryDate
+);

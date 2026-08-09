@@ -7,8 +7,7 @@ import {
     calculateTotalAgentCommission,
 } from '../utils/clientMetrics.js';
 import { openModal, closeModal } from '../components/modal.js';
-import { clientFormFieldsHtml, bindClientFormCalculations, bindClientFormDropdowns, readClientFormValues } from '../components/clientForm.js';
-import { customerFormFieldsHtml, bindCustomerTypeLabel, readCustomerFormValues } from '../components/customerForm.js';
+import { clientFormFieldsHtml, bindClientFormCalculations, bindClientFormDropdowns, bindClientFormDateGuards, validateClientFormDates, readClientFormValues } from '../components/clientForm.js';import { customerFormFieldsHtml, bindCustomerTypeLabel, readCustomerFormValues } from '../components/customerForm.js';
 import { paymentFormFieldsHtml, readPaymentFormValue } from '../components/paymentForm.js';
 import { openConfirmModal } from '../components/confirmModal.js';
 import { exportClientsToExcel, exportClientsToPdf } from '../utils/exportClients.js';
@@ -315,13 +314,21 @@ function openAddPolicyModal(customerId) {
         bodyHtml: clientFormFieldsHtml(customerId),
     });
 
-    const form = overlay.querySelector('#client-form');
+const form = overlay.querySelector('#client-form');
     bindClientFormCalculations(form);
     bindClientFormDropdowns(form);
+    bindClientFormDateGuards(form);
     overlay.querySelector('#cf-cancel-btn').addEventListener('click', closeModal);
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const dateError = validateClientFormDates(form, true);
+        if (dateError) {
+            alert(dateError);
+            return;
+        }
+
         const submitBtn = form.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Saving...';
@@ -359,6 +366,7 @@ function openEditPolicyModal(policy) {
         productName: policy.productName,
         modeOfPayment: policy.modeOfPayment,
     });
+    bindClientFormDateGuards(form);
     overlay.querySelector('#cf-cancel-btn').addEventListener('click', closeModal);
 
     const submitBtn = form.querySelector('button[type="submit"]');
@@ -366,6 +374,13 @@ function openEditPolicyModal(policy) {
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const dateError = validateClientFormDates(form, false);
+        if (dateError) {
+            alert(dateError);
+            return;
+        }
+
         submitBtn.disabled = true;
         submitBtn.textContent = 'Saving...';
 

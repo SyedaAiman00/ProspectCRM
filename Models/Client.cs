@@ -45,8 +45,11 @@ public class Client
     [Column("policy_issue_date")]
     public DateTime? PolicyIssueDate { get; set; }
 
-    [Column("policy_no")]
+[Column("policy_no")]
     public string PolicyNo { get; set; } = string.Empty;
+
+    [Column("policy_expiry_date")]
+    public DateTime? PolicyExpiryDate { get; set; }
 
     [Column("mode_of_payment")]
     public string ModeOfPayment { get; set; } = string.Empty;

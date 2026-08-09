@@ -8,8 +8,7 @@ import { prospectFormFieldsHtml, readProspectFormValues } from '../components/pr
 import { outreachFormFieldsHtml, readOutreachFormValues } from '../components/outreachForm.js';
 import { appointmentFormFieldsHtml, readAppointmentFormValues } from '../components/appointmentForm.js';
 import { closingFormFieldsHtml, readClosingFormValues } from '../components/closingForm.js';
-import { clientFormFieldsHtml, bindClientFormCalculations, bindClientFormDropdowns, readClientFormValues } from '../components/clientForm.js';
-import { isAdmin } from '../auth/session.js';
+import { clientFormFieldsHtml, bindClientFormCalculations, bindClientFormDropdowns, bindClientFormDateGuards, validateClientFormDates, readClientFormValues } from '../components/clientForm.js';import { isAdmin } from '../auth/session.js';
 import { getViewingAgentId } from '../store/state.js';
 import { targetFormFieldsHtml, readTargetFormValue } from '../components/targetForm.js';
 import { initContactPopovers } from '../components/contactPopover.js';
@@ -454,10 +453,18 @@ function openConvertPolicyStep(prospect, customerId) {
         productName: prospect.productName,
         modeOfPayment: prospect.modeOfPayment,
     });
+    bindClientFormDateGuards(form);
     overlay.querySelector('#cf-cancel-btn').addEventListener('click', closeModal);
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+
+        const dateError = validateClientFormDates(form, true);
+        if (dateError) {
+            alert(dateError);
+            return;
+        }
+
         const submitBtn = form.querySelector('button[type="submit"]');
         submitBtn.disabled = true;
         submitBtn.textContent = 'Converting...';

@@ -9,6 +9,7 @@ const EXPORT_COLUMNS = [
     { header: 'Insurance Company', key: 'insuranceCompany' },
     { header: 'Product', key: 'productName' },
     { header: 'Policy No', key: 'policyNo' },
+    { header: 'Expiry Date', key: 'policyExpiryDate' },
     { header: 'Mode of Payment', key: 'modeOfPayment' },
     { header: 'Annual Premium (AED)', key: 'annualPremium' },
     { header: 'Total Premium (AED)', key: 'totalPremium' },

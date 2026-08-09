@@ -1,8 +1,15 @@
 import { loadPage } from './router.js';
 import { getUser, isAdmin, logout } from './auth/session.js';
 import { initAgentSwitcher } from './components/agentSwitcher.js';
+import { getExpiringClients } from './api/client.js';
+import { getViewingAgentId } from './store/state.js';
+import { renderNotificationsList } from './components/notificationsPanel.js';
 
 const DEFAULT_PAGE = 'prospects';
+
+// Cache of the most recently fetched expiring policies, so opening the
+// dropdown doesn't need a fresh fetch every click.
+let expiringPoliciesCache = [];
 
 function bindNavigation() {
     document.querySelectorAll('[data-view]').forEach((link) => {
@@ -31,8 +38,46 @@ function toggleAppTheme() {
     if (window.lucide) lucide.createIcons();
 }
 
-function toggleNotifications() {
-    console.log('Notifications panel not implemented yet.');
+/**
+ * Fetches policies expiring in the next 30 days and updates the bell's
+ * red count badge. Called once at boot — the dropdown itself renders from
+ * this same cached list when opened, no extra fetch needed.
+ */
+async function loadNotifications() {
+    try {
+        const agentId = isAdmin() ? getViewingAgentId() : null;
+        const policies = await getExpiringClients(30, agentId);
+        expiringPoliciesCache = policies;
+        renderNotificationsBadge(policies.length);
+    } catch (err) {
+        console.error('Failed to load expiry notifications:', err);
+    }
+}
+
+function renderNotificationsBadge(count) {
+    const badge = document.getElementById('notifications-badge');
+    if (!badge) return;
+
+    if (count > 0) {
+        badge.textContent = count > 9 ? '9+' : String(count);
+        badge.classList.remove('hidden');
+    } else {
+        badge.classList.add('hidden');
+    }
+}
+
+function toggleNotifications(e) {
+    e.stopPropagation();
+    const dropdown = document.getElementById('notifications-dropdown');
+    if (!dropdown) return;
+
+    const isOpening = dropdown.classList.contains('hidden');
+    if (isOpening) {
+        dropdown.innerHTML = renderNotificationsList(expiringPoliciesCache);
+        dropdown.classList.remove('hidden');
+    } else {
+        dropdown.classList.add('hidden');
+    }
 }
 
 function bindTopbarControls() {
@@ -40,7 +85,18 @@ function bindTopbarControls() {
     if (themeBtn) themeBtn.addEventListener('click', toggleAppTheme);
 
     const notificationsBtn = document.getElementById('notificationsBtn');
+    const notificationsDropdown = document.getElementById('notifications-dropdown');
     if (notificationsBtn) notificationsBtn.addEventListener('click', toggleNotifications);
+
+    document.addEventListener('click', (e) => {
+        if (
+            notificationsDropdown &&
+            !notificationsDropdown.contains(e.target) &&
+            !notificationsBtn?.contains(e.target)
+        ) {
+            notificationsDropdown.classList.add('hidden');
+        }
+    });
 }
 
 /**
@@ -122,6 +178,7 @@ window.onload = () => {
     bindTopbarControls();
     bindSidebarDrawer();
     initAgentSwitcher();
+    loadNotifications();
 
     loadPage(DEFAULT_PAGE);
 };

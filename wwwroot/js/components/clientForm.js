@@ -29,6 +29,12 @@ import {
 export function clientFormFieldsHtml(customerId, prefill = {}) {
     const insuredPersonName = prefill.insuredPersonName || prefill.insuredName || '';
 
+    // Only restrict the issue date to "today or later" when adding a brand
+    // new policy — an existing policy being edited may legitimately have
+    // been issued in the past, so we don't want the picker fighting that.
+    const isEditingExisting = Boolean(prefill.policyIssueDate);
+    const issueDateMinAttr = isEditingExisting ? '' : `min="${todayIso()}"`;
+
     return `
         <form id="client-form" class="space-y-4">
             <input type="hidden" name="customerId" value="${customerId}" />
@@ -63,16 +69,21 @@ export function clientFormFieldsHtml(customerId, prefill = {}) {
                     <input class="form-input" type="text" id="cf-policy-no" name="policyNo" value="${escapeAttr(prefill.policyNo)}" />
                 </div>
                 <div>
-                    <label class="form-label" for="cf-policy-date">Policy Issue Date</label>
-                    <input class="form-input" type="date" id="cf-policy-date" name="policyIssueDate" value="${escapeAttr(prefill.policyIssueDate)}" />
-                </div>
-
-                <div class="col-span-1 sm:col-span-2">
                     <label class="form-label" for="cf-payment-mode">Mode of Payment</label>
                     <select class="form-input dropdown-select" id="cf-payment-mode" data-category="payment_mode">
                         <option value="">Loading...</option>
                     </select>
                     <input type="text" class="form-input dropdown-other-input hidden mt-2" placeholder="Enter payment mode" />
+                </div>
+
+                <div>
+                    <label class="form-label" for="cf-policy-date">Policy Issue Date</label>
+                    <input class="form-input" type="date" id="cf-policy-date" name="policyIssueDate" value="${toDateInputValue(prefill.policyIssueDate)}" ${issueDateMinAttr} />
+                </div>
+                <div>
+                    <label class="form-label" for="cf-policy-expiry-date">Policy Expiry Date</label>
+                    <input class="form-input" type="date" id="cf-policy-expiry-date" name="policyExpiryDate" value="${toDateInputValue(prefill.policyExpiryDate)}" />
+                    <p class="text-[10px] text-gray-400 mt-1">Used for expiry reminders on the notification bell.</p>
                 </div>
             </div>
 
@@ -212,6 +223,47 @@ export function bindClientFormCalculations(formEl) {
 }
 
 /**
+ * Keeps the Expiry Date field's minimum selectable date in sync with
+ * whatever Issue Date is currently set — so an agent can never pick an
+ * expiry date earlier than the issue date directly from the picker.
+ * @param {HTMLElement} formEl
+ */
+export function bindClientFormDateGuards(formEl) {
+    const issueInput = formEl.querySelector('#cf-policy-date');
+    const expiryInput = formEl.querySelector('#cf-policy-expiry-date');
+    if (!issueInput || !expiryInput) return;
+
+    const syncExpiryMin = () => {
+        expiryInput.min = issueInput.value || '';
+    };
+
+    issueInput.addEventListener('change', syncExpiryMin);
+    syncExpiryMin();
+}
+
+/**
+ * Validates the issue/expiry date relationship before submit — a friendly
+ * alert instead of relying purely on native picker constraints.
+ * @param {HTMLElement} formEl
+ * @param {boolean} isNewPolicy - only new policies get the "can't be in the past" issue-date check
+ * @returns {string|null} error message, or null if valid
+ */
+export function validateClientFormDates(formEl, isNewPolicy) {
+    const issueDate = formEl.querySelector('#cf-policy-date').value;
+    const expiryDate = formEl.querySelector('#cf-policy-expiry-date').value;
+
+    if (isNewPolicy && issueDate && issueDate < todayIso()) {
+        return 'Policy issue date cannot be in the past.';
+    }
+
+    if (issueDate && expiryDate && expiryDate < issueDate) {
+        return 'Policy expiry date cannot be before the issue date.';
+    }
+
+    return null;
+}
+
+/**
  * Reads the form's raw inputs into a plain object matching the backend's
  * Create/UpdateClientRequest shape. Derived fields (VAT, Total Premium,
  * Total Commission, Agent Commission, Balance) are intentionally NOT sent —
@@ -233,6 +285,7 @@ export function readClientFormValues(formEl) {
         productName: readDropdownValue(formEl.querySelector('#cf-product')),
         policyNo: formData.get('policyNo')?.trim() || '',
         policyIssueDate: formData.get('policyIssueDate') || null,
+        policyExpiryDate: formData.get('policyExpiryDate') || null,
         modeOfPayment: readDropdownValue(formEl.querySelector('#cf-payment-mode')),
         annualPremium: Number(formData.get('annualPremium')) || 0,
         policyFee: Number(formData.get('policyFee')) || 0,
@@ -242,6 +295,16 @@ export function readClientFormValues(formEl) {
         agentSplitPercent: Number(formData.get('agentSplit')) || 0,
         remarks: formData.get('remarks')?.trim() || null,
     };
+}
+
+/** @param {string|null|undefined} value */
+function toDateInputValue(value) {
+    if (!value) return '';
+    return value.toString().split('T')[0]; // "2026-08-10T00:00:00" -> "2026-08-10"
+}
+
+function todayIso() {
+    return new Date().toISOString().split('T')[0];
 }
 
 function escapeAttr(value) {
