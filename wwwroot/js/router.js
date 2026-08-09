@@ -4,6 +4,7 @@ import { initClients } from './pages/clients.js';
 import { initPremiumCalculator } from './pages/calculator.js';
 import { initCommissionLedger } from './pages/commissions.js';
 import { initDropdowns } from './pages/dropdowns.js';
+import { initPolicyExpiry } from './pages/policyExpiry.js';
 
 const PAGES = {
     dashboard: {
@@ -25,6 +26,11 @@ const PAGES = {
     commissions: {
         init: initCommissionLedger,
         title: 'Commission Ledger',
+    },
+
+    policyExpiry: {
+        init: initPolicyExpiry,
+        title: 'Policy Expiry',
     },
 
     dropdowns: {
