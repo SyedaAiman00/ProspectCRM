@@ -60,7 +60,10 @@ function bindAddCustomerButton() {
 }
 
 /**
- * Wires up the Export button's dropdown (Excel / PDF).
+ * Wires up the Export button's dropdown (Excel / PDF). Guarded against
+ * double-binding — this lives in static HTML (unlike the customer cards,
+ * which get replaced on every render), so without this guard every call
+ * to initClients() would stack another set of listeners on the same buttons.
  */
 function bindExportButton() {
     const exportBtn = document.getElementById('btn-export-clients');
@@ -68,7 +71,7 @@ function bindExportButton() {
     const excelBtn = document.getElementById('export-clients-excel');
     const pdfBtn = document.getElementById('export-clients-pdf');
 
-    if (!exportBtn || !menu) return;
+    if (!exportBtn || !menu || exportBtn.dataset.bound) return;
 
     exportBtn.addEventListener('click', (e) => {
         e.stopPropagation();
@@ -92,7 +95,7 @@ function bindExportButton() {
         });
     }
 
-    if (pdfBtn) {
+   if (pdfBtn) {
         pdfBtn.addEventListener('click', () => {
             if (currentPolicies.length === 0) {
                 alert('There are no policies to export yet.');
@@ -102,6 +105,8 @@ function bindExportButton() {
             menu.classList.add('hidden');
         });
     }
+
+    exportBtn.dataset.bound = 'true'; // guard against double-binding across re-inits
 }
 
 /**
