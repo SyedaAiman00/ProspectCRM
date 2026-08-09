@@ -14,6 +14,8 @@ import { getViewingAgentId } from '../store/state.js';
 import { targetFormFieldsHtml, readTargetFormValue } from '../components/targetForm.js';
 import { initContactPopovers } from '../components/contactPopover.js';
 import { openConfirmModal } from '../components/confirmModal.js';
+import { getCustomers, createCustomer } from '../api/customer.js';
+import { convertCustomerStepHtml, bindConvertCustomerStepToggle, readConvertCustomerStepValue } from '../components/convertCustomerStep.js';
 
 
 // Maps each pipeline stage to its column + counter element IDs in prospects.html
@@ -352,23 +354,100 @@ function openMarkClosedModal(prospect) {
 }
 
 /**
- * Opens the Convert to Client modal for a Qualified prospect, prefilled
- * with what carries over (Insured Name, Remarks). On save: creates the
- * Client record, then deletes the original prospect (per product decision —
- * once converted, the prospect record no longer needs to exist separately).
+ * Opens the Convert to Client flow for a Qualified prospect. Two steps:
+ * 1. Pick an existing Customer to attach the new policy to, or create a
+ *    new one (defaulting to the prospect's name).
+ * 2. Fill in the actual policy details, scoped to that customer.
+ * On final save: creates the policy, then deletes the original prospect
+ * (per product decision — once converted, the prospect record no longer
+ * needs to exist separately).
  * @param {object} prospect
  */
-function openConvertToClientModal(prospect) {
+async function openConvertToClientModal(prospect) {
+    let customers = [];
+    try {
+        const agentId = isAdmin() ? getViewingAgentId() : null;
+        customers = await getCustomers(agentId);
+    } catch (err) {
+        console.error('Failed to load customers for conversion:', err);
+        alert('Could not load your customer list. Please try again.');
+        return;
+    }
+
+    openConvertCustomerStep(prospect, customers);
+}
+
+/**
+ * Step 1 of conversion — choose or create the Customer.
+ * @param {object} prospect
+ * @param {object[]} customers
+ */
+function openConvertCustomerStep(prospect, customers) {
     const overlay = openModal({
         title: `Convert to Client — ${prospect.prospectName}`,
-        bodyHtml: clientFormFieldsHtml({
-            insuredName: prospect.prospectName,
+        bodyHtml: convertCustomerStepHtml(customers, prospect.prospectName),
+    });
+
+    const form = overlay.querySelector('#convert-customer-form');
+    bindConvertCustomerStepToggle(form);
+    overlay.querySelector('#ccs-cancel-btn').addEventListener('click', closeModal);
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const submitBtn = form.querySelector('button[type="submit"]');
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Continuing...';
+
+        try {
+            const selection = readConvertCustomerStepValue(form);
+
+            let customerId;
+            if (selection.isNew) {
+                if (!selection.name) {
+                    alert('Please enter a customer name.');
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = 'Continue';
+                    return;
+                }
+                const newCustomer = await createCustomer({
+                    name: selection.name,
+                    customerType: selection.customerType,
+                    phone: null,
+                    email: null,
+                    notes: null,
+                });
+                customerId = newCustomer.id;
+            } else {
+                customerId = selection.customerId;
+            }
+
+            closeModal();
+            openConvertPolicyStep(prospect, customerId);
+        } catch (err) {
+            console.error('Failed to resolve customer for conversion:', err);
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Continue';
+            alert('Something went wrong setting up the customer. Please try again.');
+        }
+    });
+}
+
+/**
+ * Step 2 of conversion — fill in the actual policy, now that we know
+ * which Customer it belongs to.
+ * @param {object} prospect
+ * @param {number} customerId
+ */
+function openConvertPolicyStep(prospect, customerId) {
+    const overlay = openModal({
+        title: `Add Policy — ${prospect.prospectName}`,
+        bodyHtml: clientFormFieldsHtml(customerId, {
+            insuredPersonName: prospect.prospectName,
             remarks: prospect.remarks,
         }),
     });
 
     const form = overlay.querySelector('#client-form');
-    bindClientFormCalculations(form);
     bindClientFormCalculations(form);
     bindClientFormDropdowns(form, {
         insuranceCompany: prospect.insuranceCompany, // usually undefined on a prospect — fine, dropdown just opens blank
@@ -392,7 +471,7 @@ function openConvertToClientModal(prospect) {
         } catch (err) {
             console.error('Failed to convert prospect to client:', err);
             submitBtn.disabled = false;
-            submitBtn.textContent = 'Save Client';
+            submitBtn.textContent = 'Save Policy';
             alert('Something went wrong converting this prospect. Please try again.');
         }
     });
