@@ -15,11 +15,11 @@ export const EXPIRY_URGENCY = {
 };
 
 export const URGENCY_META = {
-    [EXPIRY_URGENCY.EXPIRED]: { label: 'Expired', badgeClass: 'bg-gray-800 text-white' },
-    [EXPIRY_URGENCY.CRITICAL]: { label: 'Critical', badgeClass: 'bg-rose-50 text-rose-700 border border-rose-200' },
-    [EXPIRY_URGENCY.URGENT]: { label: 'Urgent', badgeClass: 'bg-orange-50 text-orange-700 border border-orange-200' },
-    [EXPIRY_URGENCY.UPCOMING]: { label: 'Upcoming', badgeClass: 'bg-amber-50 text-amber-700 border border-amber-200' },
-    [EXPIRY_URGENCY.PLANNED]: { label: 'Planned', badgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200' },
+    [EXPIRY_URGENCY.EXPIRED]: { label: 'Expired', badgeClass: 'bg-gray-800 text-white', rowClass: 'pe-row-expired' },
+    [EXPIRY_URGENCY.CRITICAL]: { label: 'Critical', badgeClass: 'bg-rose-50 text-rose-700 border border-rose-200', rowClass: 'pe-row-critical' },
+    [EXPIRY_URGENCY.URGENT]: { label: 'Urgent', badgeClass: 'bg-orange-50 text-orange-700 border border-orange-200', rowClass: 'pe-row-urgent' },
+    [EXPIRY_URGENCY.UPCOMING]: { label: 'Upcoming', badgeClass: 'bg-amber-50 text-amber-700 border border-amber-200', rowClass: 'pe-row-upcoming' },
+    [EXPIRY_URGENCY.PLANNED]: { label: 'Planned', badgeClass: 'bg-emerald-50 text-emerald-700 border border-emerald-200', rowClass: 'pe-row-planned' },
 };
 
 /**

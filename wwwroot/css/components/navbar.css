@@ -101,7 +101,7 @@ body.canvas-dark-theme .user-menu-dropdown {
 .notifications-dropdown {
     position: absolute;
     top: calc(100% + 8px);
-    left: 0;
+    right: 0;
     background-color: #ffffff;
     border: 1px solid #f1f5f9;
     border-radius: 0.75rem;
@@ -115,6 +115,20 @@ body.canvas-dark-theme .user-menu-dropdown {
 }
 .notifications-dropdown.hidden {
     display: none;
+}
+
+/* On narrow screens, anchor to the viewport instead of the bell button so
+   the dropdown can never overflow past the screen edge regardless of
+   exactly where the bell sits in the header. */
+@media (max-width: 480px) {
+    .notifications-dropdown {
+        position: fixed;
+        top: 4.5rem;
+        left: 0.75rem;
+        right: 0.75rem;
+        width: auto;
+        max-width: none;
+    }
 }
 
 .notification-item {

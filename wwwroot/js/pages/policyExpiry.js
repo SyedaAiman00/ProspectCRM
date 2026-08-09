@@ -260,8 +260,8 @@ function renderPolicyRow(p) {
             ? 'Expires today'
             : `${days} day${days === 1 ? '' : 's'} remaining`;
 
-    return `
-        <div class="bg-white rounded-xl border border-gray-200/80 shadow-sm p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+   return `
+        <div class="pe-policy-row ${meta.rowClass} rounded-xl shadow-sm p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div class="min-w-0 flex-1">
                 <div class="flex items-center gap-2 flex-wrap">
                     <h4 class="font-bold text-gray-900 text-sm truncate">${escapeText(customerName)}</h4>
