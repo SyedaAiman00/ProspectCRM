@@ -47,9 +47,23 @@ public static class ClientEndpoints
                 return Results.BadRequest("Insured name is required.");
             }
 
+            var customer = await db.Customers.FindAsync(request.CustomerId);
+            if (customer is null)
+            {
+                return Results.BadRequest("The selected customer does not exist.");
+            }
+            if (!caller.IsAdmin() && customer.AgentId != caller.GetUserId())
+            {
+                return Results.Forbid();
+            }
+
             var newClient = new Client
             {
                 AgentId = caller.GetUserId(),
+                CustomerId = request.CustomerId,
+                InsuredPersonName = string.IsNullOrWhiteSpace(request.InsuredPersonName)
+                    ? request.InsuredName
+                    : request.InsuredPersonName,
                 InsuranceCompany = request.InsuranceCompany,
                 ProductName = request.ProductName,
                 SponsorDetails = request.SponsorDetails,
@@ -67,7 +81,6 @@ public static class ClientEndpoints
 
             return Results.Created($"/api/clients/{newClient.Id}", newClient);
         }).RequireAuthorization();
-
         // Full update of a client policy — used for correcting a typo, recording
         // a new payment against the balance, or updating any policy detail.
         // Same ownership rule as everywhere else: Agents only touch their own,
@@ -86,6 +99,20 @@ public static class ClientEndpoints
                 return Results.BadRequest("Insured name is required.");
             }
 
+            var customer = await db.Customers.FindAsync(request.CustomerId);
+            if (customer is null)
+            {
+                return Results.BadRequest("The selected customer does not exist.");
+            }
+            if (!caller.IsAdmin() && customer.AgentId != caller.GetUserId())
+            {
+                return Results.Forbid();
+            }
+
+            client.CustomerId = request.CustomerId;
+            client.InsuredPersonName = string.IsNullOrWhiteSpace(request.InsuredPersonName)
+                ? request.InsuredName
+                : request.InsuredPersonName;
             client.InsuranceCompany = request.InsuranceCompany;
             client.ProductName = request.ProductName;
             client.SponsorDetails = request.SponsorDetails;
@@ -101,7 +128,6 @@ public static class ClientEndpoints
 
             return Results.Ok(client);
         }).RequireAuthorization();
-
         // Quick, single-field update — just recording a new payment against the
         // balance without re-submitting the entire policy form.
         group.MapPatch("/{id:int}/payment", async (int id, AppDbContext db, ClaimsPrincipal caller, RecordPaymentRequest payment) =>
@@ -155,6 +181,23 @@ public static class ClientEndpoints
                 await db.SaveChangesAsync();
                 return Results.Ok("Test Client successfully saved to MySQL Workbench!");
             });
+
+
+            // All policies belonging to one customer — powers the customer's
+        // expanded policy list on the Clients Board.
+        group.MapGet("/by-customer/{customerId:int}", async (int customerId, AppDbContext db, ClaimsPrincipal caller) =>
+        {
+            var customer = await db.Customers.FindAsync(customerId);
+            if (customer is null) return Results.NotFound();
+            if (!caller.IsAdmin() && customer.AgentId != caller.GetUserId()) return Results.Forbid();
+
+            var policies = await db.Clients
+                .Where(c => c.CustomerId == customerId)
+                .ToListAsync();
+
+            return Results.Ok(policies);
+        }).RequireAuthorization();
+        
         }
     }
 
@@ -206,6 +249,8 @@ public interface IClientFinancialInputs
 }
 
 public record CreateClientRequest(
+    int CustomerId,
+    string InsuredPersonName,
     string InsuranceCompany,
     string ProductName,
     string? SponsorDetails,
@@ -223,6 +268,8 @@ public record CreateClientRequest(
 ) : IClientFinancialInputs;
 
 public record UpdateClientRequest(
+    int CustomerId,
+    string InsuredPersonName,
     string InsuranceCompany,
     string ProductName,
     string? SponsorDetails,

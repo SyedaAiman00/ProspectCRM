@@ -8,8 +8,27 @@ public class Client
     [Column("id")]
     public int Id { get; set; }
 
-    [Column("agent_id")]
+[Column("agent_id")]
     public int AgentId { get; set; }
+
+    /// <summary>
+    /// The Customer (Individual or Group/Corporate) this policy belongs to.
+    /// Nullable during the transition — existing policies created before this
+    /// field existed get backfilled by the AddCustomerLink migration; every
+    /// new policy going forward must set this.
+    /// </summary>
+    [Column("customer_id")]
+    public int? CustomerId { get; set; }
+
+    /// <summary>
+    /// Who is actually covered by THIS specific policy — e.g. "Ahmed (Self)",
+    /// "Fatima (Spouse)" for an Individual customer's dependents, or
+    /// "ABC Trading LLC" / "Owner" for a Group customer's various products.
+    /// Distinct from the Customer's own Name, since one customer can have
+    /// several policies each covering a different person or entity.
+    /// </summary>
+    [Column("insured_person_name")]
+    public string? InsuredPersonName { get; set; }
 
     [Column("insurance_company")]
     public string InsuranceCompany { get; set; } = string.Empty;
