@@ -86,6 +86,18 @@ if (!app.Environment.IsDevelopment())
 }
 app.UseHttpsRedirection();
 
+
+
+// Apply any pending EF Core migrations automatically on startup — so
+// deploying new code (which may include new migration files) also brings
+// the database schema up to date without a manual step against production.
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await db.Database.MigrateAsync();
+}
+
+
 // --- Database Migration and Seeding Block ---
 // Migrations must run BEFORE seeding roles/data so the tables physically exist.
 using (var scope = app.Services.CreateScope())
@@ -128,6 +140,7 @@ app.MapAuthEndpoints();
 app.MapUserEndpoints();
 app.MapProspectEndpoints();
 app.MapClientEndpoints();
+app.MapCustomerEndpoints();
 app.MapDropdownEndpoints();
 app.MapFallbackToFile("index.html");
 
