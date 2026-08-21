@@ -47,21 +47,20 @@ body.auth-page {
 }
 
 .auth-brand-icon {
-    background-color: var(--color-primary);
-    color: white;
     width: 28px;
     height: 28px;
-    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.auth-brand-icon i,
-.auth-brand-icon svg {
-    width: 14px;
-    height: 14px;
+.auth-brand-icon img {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
 }
+
+
 
 .auth-brand-name {
     font-size: 20px;
