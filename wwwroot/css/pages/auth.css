@@ -43,7 +43,7 @@ body.auth-page {
 .auth-brand {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
 }
 
 .auth-brand-icon {
@@ -304,21 +304,28 @@ body.auth-page {
     display: flex;
     justify-content: center;
     width: 100%;
-    
+    height: 43px;
+    margin-bottom: 12px;
+    transition: all .25s ease;
 }
 
 .auth-google-btn-container > div {
     width: 100% !important;
+    height: 43px !important;
 }
 
 
-.auth-btn-google:hover {
-    background-color: #fafafa;
-    border-color: #bfc5cc;
-    box-shadow: 0 8px 18px rgba(0,0,0,.05);
+/* Match the Google button to Get Started dimensions */
+.auth-google-btn-container iframe {
+    width: 100% !important;
+    height: 43px !important;
+    border-radius: 8px !important;
+}
+
+/* Hover effect */
+.auth-google-btn-container:hover {
     transform: translateY(-1px);
 }
-
 
 
 .auth-divider::before,
