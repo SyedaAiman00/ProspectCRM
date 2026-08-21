@@ -319,7 +319,7 @@ body.auth-page {
 .auth-google-btn-container iframe {
     width: 100% !important;
     height: 43px !important;
-    border-radius: 8px !important;
+    border-radius: 9px !important;
 }
 
 /* Hover effect */

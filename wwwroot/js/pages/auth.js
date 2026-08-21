@@ -212,7 +212,7 @@ function initGoogleSignIn() {
     size: 'large',
     text: 'signin_with',
     shape: 'rectangular',
-    width: 420,
+    width: 400,
 });
     }
 
@@ -224,7 +224,7 @@ function initGoogleSignIn() {
     size: 'large',
     text: 'signup_with',
     shape: 'rectangular',
-    width: 420,
+    width: 40,
 });
     }
 }
