@@ -43,21 +43,24 @@ body.auth-page {
 .auth-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
 .auth-brand-icon {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
+    background: transparent !important;
+    padding: 0;
 }
 
 .auth-brand-icon img {
-    width: 28px;
-    height: 28px;
+    width: 36px;
+    height: 36px;
     object-fit: contain;
+    display: block;
 }
 
 
@@ -69,11 +72,12 @@ body.auth-page {
 }
 
 
-
 .auth-hero-text {
     margin-top: 20px;
-    margin-right: 30px;
     max-width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
 }
 
 .auth-hero-text h1 {
@@ -81,7 +85,6 @@ body.auth-page {
     color: var(--color-text-dark);
     line-height: 1.25;
     margin-bottom: 8px;
-    margin-right: 30px;
     font-weight: 700;
 }
 
