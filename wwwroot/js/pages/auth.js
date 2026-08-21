@@ -208,11 +208,11 @@ function initGoogleSignIn() {
 
     if (loginContainer) {
        google.accounts.id.renderButton(loginContainer, {
-    theme: 'filled_blue',
+    theme: 'outline',
     size: 'large',
     text: 'signin_with',
     shape: 'rectangular',
-    width: 400,
+    width: 420,
 });
     }
 
@@ -220,11 +220,11 @@ function initGoogleSignIn() {
 
     if (signupContainer) {
         google.accounts.id.renderButton(signupContainer, {
-    theme: 'filled_blue',
+    theme: 'outline',
     size: 'large',
     text: 'signup_with',
     shape: 'rectangular',
-    width: 400,
+    width: 420,
 });
     }
 }
