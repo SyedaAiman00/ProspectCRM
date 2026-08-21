@@ -207,23 +207,25 @@ function initGoogleSignIn() {
     const loginContainer = document.getElementById('google-login-btn');
 
     if (loginContainer) {
-        google.accounts.id.renderButton(loginContainer, {
-            theme: 'outline',
-            size: 'large',
-            text: 'signin_with',
-            shape: 'rectangular',
-        });
+       google.accounts.id.renderButton(loginContainer, {
+    theme: 'filled_blue',
+    size: 'large',
+    text: 'signin_with',
+    shape: 'rectangular',
+    width: 400,
+});
     }
 
     const signupContainer = document.getElementById('google-signup-btn');
 
     if (signupContainer) {
         google.accounts.id.renderButton(signupContainer, {
-            theme: 'outline',
-            size: 'large',
-            text: 'signup_with',
-            shape: 'rectangular',
-        });
+    theme: 'filled_blue',
+    size: 'large',
+    text: 'signup_with',
+    shape: 'rectangular',
+    width: 400,
+});
     }
 }
 
