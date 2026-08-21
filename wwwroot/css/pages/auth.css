@@ -68,13 +68,11 @@ body.auth-page {
     color: var(--color-text-main);
 }
 
-.auth-brand-name span {
-    color: var(--color-primary);
-    font-weight: 400;
-}
+
 
 .auth-hero-text {
     margin-top: 20px;
+    margin-right: 30px;
     max-width: 420px;
 }
 
@@ -83,6 +81,7 @@ body.auth-page {
     color: var(--color-text-dark);
     line-height: 1.25;
     margin-bottom: 8px;
+    margin-right: 30px;
     font-weight: 700;
 }
 
