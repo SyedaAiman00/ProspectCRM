@@ -126,7 +126,7 @@ body.auth-page {
     margin-top: 24px;
     width: 100%;
     flex-grow: 1;
-    display: flex;
+    display: grid;
     align-items: flex-end;
     overflow: hidden;
 }
