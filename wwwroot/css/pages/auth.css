@@ -97,8 +97,10 @@ body.auth-page {
     margin-top: 16px;
     list-style: none;
     display: grid;
-    flex-direction: column;
-    gap: 10px;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+    row-gap: 10px;
+    padding: 0;
 }
 
 .auth-feature-item {
