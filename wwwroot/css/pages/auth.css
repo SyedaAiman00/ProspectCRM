@@ -96,7 +96,7 @@ body.auth-page {
 .auth-features-list {
     margin-top: 16px;
     list-style: none;
-    display: flex;
+    display: grid;
     flex-direction: column;
     gap: 10px;
 }
@@ -126,7 +126,7 @@ body.auth-page {
     margin-top: 24px;
     width: 100%;
     flex-grow: 1;
-    display: grid;
+    display: flex;
     align-items: flex-end;
     overflow: hidden;
 }
