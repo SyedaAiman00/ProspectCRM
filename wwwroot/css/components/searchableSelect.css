@@ -1,0 +1,65 @@
+/* ==========================================================================
+   SEARCHABLE SELECT — reusable searchable-dropdown widget (e.g. Nationality)
+   A text input for typing/searching + a hidden input holding the actual
+   value + a filtered options list. Styled to match the existing .form-input
+   fields and dropdown/menu patterns already used elsewhere in the app
+   (export menu, notifications dropdown) rather than a new visual language.
+   ========================================================================== */
+
+.searchable-select {
+    position: relative;
+}
+
+.searchable-select-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.6rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    max-height: 14rem;
+    overflow-y: auto;
+    padding: 0.3rem;
+    z-index: 70;
+}
+.searchable-select-dropdown.hidden {
+    display: none;
+}
+
+.searchable-select-option {
+    padding: 0.45rem 0.6rem;
+    border-radius: 0.4rem;
+    font-size: 0.8rem;
+    color: #374151;
+    cursor: pointer;
+}
+.searchable-select-option:hover,
+.searchable-select-option.highlighted {
+    background-color: #f0fdfa;
+    color: #0d9488;
+}
+
+.searchable-select-empty {
+    padding: 0.6rem;
+    font-size: 0.75rem;
+    color: #9ca3af;
+    text-align: center;
+}
+
+body.canvas-dark-theme .searchable-select-dropdown {
+    background-color: #1e293b;
+    border-color: #334155;
+}
+body.canvas-dark-theme .searchable-select-option {
+    color: #e2e8f0;
+}
+body.canvas-dark-theme .searchable-select-option:hover,
+body.canvas-dark-theme .searchable-select-option.highlighted {
+    background-color: #334155;
+    color: #2dd4bf;
+}
+body.canvas-dark-theme .searchable-select-empty {
+    color: #64748b;
+}

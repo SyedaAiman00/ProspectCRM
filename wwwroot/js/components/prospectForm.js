@@ -4,6 +4,7 @@
  * (call response, appointments, closing) are filled in via
  * "Log New Outreach" as the prospect progresses, not here.
  */
+import { populateNationalityDropdown } from '../utils/nationalityDropdown.js';
 
 export function prospectFormFieldsHtml() {
     return `
@@ -14,9 +15,13 @@ export function prospectFormFieldsHtml() {
                     <input class="form-input" type="text" id="pf-name" name="prospectName" required />
                 </div>
 
-                <div>
-                    <label class="form-label" for="pf-nationality">Nationality</label>
-                    <input class="form-input" type="text" id="pf-nationality" name="nationality" />
+                                <div>
+                    <label class="form-label" for="pf-nationality-input">Nationality</label>
+                    <div class="searchable-select" id="pf-nationality-wrapper">
+                        <input type="text" class="form-input searchable-select-input" id="pf-nationality-input" autocomplete="off" />
+                        <input type="hidden" name="nationality" id="pf-nationality-value" />
+                        <div class="searchable-select-dropdown hidden" id="pf-nationality-dropdown"></div>
+                    </div>
                 </div>
 
                 <div>
@@ -55,6 +60,18 @@ export function prospectFormFieldsHtml() {
             </div>
         </form>
     `;
+}
+
+/**
+ * Wires up the Nationality searchable dropdown. Call this once, right
+ * after injecting the form HTML into the DOM (same pattern as
+ * bindClientFormDropdowns in clientForm.js).
+ * @param {HTMLElement} formEl
+ * @param {string} [currentValue] - existing nationality, when editing; leave blank for a new prospect
+ */
+export function bindProspectFormNationality(formEl, currentValue = '') {
+    const wrapper = formEl.querySelector('#pf-nationality-wrapper');
+    if (wrapper) populateNationalityDropdown(wrapper, currentValue);
 }
 
 /**

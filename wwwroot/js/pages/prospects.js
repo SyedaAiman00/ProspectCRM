@@ -4,7 +4,7 @@ import { getCurrentUser, updateMonthlyTarget } from '../api/user.js';
 import { groupProspectsByStage, calculatePipelineValue, getPipelineStage, PIPELINE_STAGES } from '../utils/pipeline.js';
 import { ProspectCard } from '../components/cards.js';
 import { openModal, closeModal } from '../components/modal.js';
-import { prospectFormFieldsHtml, readProspectFormValues } from '../components/prospectForm.js';
+import { prospectFormFieldsHtml, readProspectFormValues, bindProspectFormNationality } from '../components/prospectForm.js';
 import { outreachFormFieldsHtml, readOutreachFormValues } from '../components/outreachForm.js';
 import { appointmentFormFieldsHtml, readAppointmentFormValues } from '../components/appointmentForm.js';
 import { closingFormFieldsHtml, readClosingFormValues } from '../components/closingForm.js';
@@ -230,6 +230,7 @@ function openAddProspectModal() {
     });
 
     const form = overlay.querySelector('#prospect-form');
+    bindProspectFormNationality(form);
     overlay.querySelector('#pf-cancel-btn').addEventListener('click', closeModal);
 
     form.addEventListener('submit', async (e) => {
