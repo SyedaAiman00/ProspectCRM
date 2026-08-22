@@ -43,7 +43,7 @@
 
 /* App Branding Accent Wrapper */
 .brand-icon-box {
-    background-color: #ffffff;
+    background-color:  var(--color-sidebar);
     width: 2.25rem;
     height: 2.25rem;
     border-radius: 0.75rem;
