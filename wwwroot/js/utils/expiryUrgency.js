@@ -45,9 +45,9 @@ export function getExpiryUrgency(expiryDateStr) {
     const days = daysRemaining(expiryDateStr);
 
     if (days < 0) return EXPIRY_URGENCY.EXPIRED;
-    if (days <= 3) return EXPIRY_URGENCY.CRITICAL;
-    if (days <= 7) return EXPIRY_URGENCY.URGENT;
-    if (days <= 15) return EXPIRY_URGENCY.UPCOMING;
+    if (days <= 7) return EXPIRY_URGENCY.CRITICAL;
+    if (days <= 30) return EXPIRY_URGENCY.URGENT;
+    if (days <= 60) return EXPIRY_URGENCY.UPCOMING;
     return EXPIRY_URGENCY.PLANNED; // 16+ days, including anything further out than 30
 }
 
